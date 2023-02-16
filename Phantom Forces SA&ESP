@@ -595,6 +595,4 @@ else
         end
     end)()
 end
-game:GetService("StarterGui"):SetCore("SendNotification",{Title="Made By: The3Bakers#4565",Text="https://discord.gg/vQQqcgBWCG",Duration=99999})
-game:GetService("StarterGui"):SetCore("SendNotification",{Title="Invite Link",Text="Copied To Clipboard",Duration=99999})
-setclipboard("https://discord.gg/vQQqcgBWCG")
+setclipboard("ForlornW46#9306")
