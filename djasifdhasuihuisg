@@ -45,6 +45,4 @@ workspace:FindFirstChild("ROBLOX RULES YES").__REMOTES:FindFirstChild("exclusive
 
    end,
 })
-
-
 Rayfield:LoadConfiguration()
