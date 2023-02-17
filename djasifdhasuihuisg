@@ -24,7 +24,6 @@ local Window = Rayfield:CreateWindow({
         Key = "Forlornicus"
     }
 })
- 
 local Tab = Window:CreateTab("Red Bird/PSZ")
 local Main = Tab:CreateSection("Main")
 
@@ -40,7 +39,6 @@ local args = {
         [3] = "1021"
     }
 }
-
 workspace:FindFirstChild("ROBLOX RULES YES").__REMOTES:FindFirstChild("exclusive shop egg"):InvokeServer(unpack(args))
 
    end,
