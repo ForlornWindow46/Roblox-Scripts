@@ -26,7 +26,6 @@ local Window = Rayfield:CreateWindow({
 })
 local Tab = Window:CreateTab("Red Bird/PSZ")
 local Main = Tab:CreateSection("Main")
-
 local Toggle = Tab:CreateButton({
    Name = "Give Max Gems",
    CurrentValue = false,
