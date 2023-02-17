@@ -1,47 +1,50 @@
-local Rayfield = loadstring(gameHttpGet('httpsraw.githubusercontent.comshlexwareRayfieldmainsource'))()
-local Window = RayfieldCreateWindow({
-    Name = Forlorn Hub,
-    LoadingTitle = Forlorn Hub Loading,
-    LoadingSubtitle = by ForlornW46,
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+local Window = Rayfield:CreateWindow({
+    Name = "Forlorn Hub",
+    LoadingTitle = "Forlorn Hub Loading",
+    LoadingSubtitle = "by ForlornW46",
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = Forlorn Hub,
-        FileName = Forlorn Hub
+        FolderName = "Forlorn Hub",
+        FileName = "Forlorn Hub"
     },
         Discord = {
             Enabled = false,
-            Invite = ,
+            Invite = "",
             RememberJoins = false
         },
     KeySystem = false,
     KeySettings = {
-        Title = Forlorn Hub,
-        Subtitle = Key System,
-        Note = Join the discord,
-        FileName = ForlornKey,
+        Title = "Forlorn Hub",
+        Subtitle = "Key System",
+        Note = "Join the discord",
+        FileName = "ForlornKey",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = Forlornicus
+        Key = "Forlornicus"
     }
 })
  
-local Tab = WindowCreateTab(Red BirdPSZ)
-local Main = TabCreateSection(Main)
+local Tab = Window:CreateTab("Red Bird/PSZ")
+local Main = Tab:CreateSection("Main")
 
-local Toggle = TabCreateButton({
-   Name = Give Max Gems,
+local Toggle = Tab:CreateButton({
+   Name = "Give Max Gems",
    CurrentValue = false,
-   Flag = Toggle1,
+   Flag = "Toggle1",
    Callback = function(Value)
 local args = {
     [1] = {
-        [1] = -100000000000000,
-        [2] = 0,
-        [3] = 1021
+        [1] = "-100000000000000",
+        [2] = "0",
+        [3] = "1021"
     }
 }
 
-workspaceFindFirstChild(ROBLOX RULES YES).__REMOTESFindFirstChild(exclusive shop egg)InvokeServer(unpack(args))
+workspace:FindFirstChild("ROBLOX RULES YES").__REMOTES:FindFirstChild("exclusive shop egg"):InvokeServer(unpack(args))
 
    end,
 })
+
+
+Rayfield:LoadConfiguration()
