@@ -27,7 +27,7 @@ local RayfieldLibrary = {
 			
 			Background = Color3.fromRGB(72, 23, 23),
 			Topbar = Color3.fromRGB(108, 35, 35),
-			Shadow = Color3.fromRGB(69, 22, 22),
+			Shadow = Color3.fromRGB(72, 23, 23),
 			
 			NotificationBackground = Color3.fromRGB(72, 23, 23),
 			NotificationActionsBackground = Color3.fromRGB(0,0,0),
@@ -39,7 +39,7 @@ local RayfieldLibrary = {
 			SelectedTabTextColor = Color3.fromRGB(0,0,0),
 			
 			ElementBackground = Color3.fromRGB(69, 22, 22),
-			ElementBackgroundHover = Color3.fromRGB(40, 40, 40),
+			ElementBackgroundHover = Color3.fromRGB(72, 23, 23),
 			SecondaryElementBackground = Color3.fromRGB(25, 25, 25), -- For labels and paragraphs
 			ElementStroke = Color3.fromRGB(50, 50, 50),
 			SecondaryElementStroke = Color3.fromRGB(40, 40, 40), -- For labels and paragraphs
@@ -77,11 +77,11 @@ local RayfieldLibrary = {
 			TabTextColor = Color3.fromRGB(240, 240, 240),
 			SelectedTabTextColor = Color3.fromRGB(50, 50, 50),
 		
-			ElementBackground = Color3.fromRGB(198, 198, 198),
-			ElementBackgroundHover = Color3.fromRGB(230, 230, 230),
-			SecondaryElementBackground = Color3.fromRGB(136, 136, 136), -- For labels and paragraphs
+			ElementBackground = Color3.fromRGB(69, 22, 22),
+			ElementBackgroundHover = Color3.fromRGB(99, 31, 31),
+			SecondaryElementBackground = Color3.fromRGB(69, 22, 22), -- For labels and paragraphs
 			ElementStroke = Color3.fromRGB(180, 199, 97),
-			SecondaryElementStroke = Color3.fromRGB(40, 40, 40), -- For labels and paragraphs
+			SecondaryElementStroke = Color3.fromRGB(99, 31, 31), -- For labels and paragraphs
 
 			SliderBackground = Color3.fromRGB(31, 159, 71),
 			SliderProgress = Color3.fromRGB(31, 159, 71),
