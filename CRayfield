@@ -48,7 +48,7 @@ local RayfieldLibrary = {
 			SliderProgress = Color3.fromRGB(43, 105, 159),
 			SliderStroke = Color3.fromRGB(48, 119, 177),
 			
-			ToggleBackground = Color3.fromRGB(30, 30, 30),
+			ToggleBackground = Color3.fromRGB(69, 22, 22),
 			ToggleEnabled = Color3.fromRGB(0, 146, 214),
 			ToggleDisabled = Color3.fromRGB(100, 100, 100),
 			ToggleEnabledStroke = Color3.fromRGB(0, 170, 255),
@@ -64,9 +64,9 @@ local RayfieldLibrary = {
 			TextFont = "Gotham", -- Default will use the various font faces used across Rayfield
 			TextColor = Color3.fromRGB(50, 50, 50), -- i need to make all text 240, 240, 240 and base gray on transparency not color to do this
 			
-			Background = Color3.fromRGB(255, 255, 255),
-			Topbar = Color3.fromRGB(217, 217, 217),
-			Shadow = Color3.fromRGB(223, 223, 223),
+			Background = Color3.fromRGB(69, 22, 22),
+			Topbar = Color3.fromRGB(69, 22, 22),
+			Shadow = Color3.fromRGB(69, 22, 22),
 
 			NotificationBackground = Color3.fromRGB(20, 20, 20),
 			NotificationActionsBackground = Color3.fromRGB(230, 230, 230),
