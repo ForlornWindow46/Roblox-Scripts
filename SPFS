@@ -1,0 +1,45 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/slf0Dev/Ocerium_Project/main/Library.lua"))()
+Window = Library.Main("Forlorn Hub","LeftAlt")
+
+local Tab = Window.NewTab("Super Power Fighting Simulator")
+local Section = Tab.NewSection("Stuff")
+
+local Toggle = Section.NewToggle("Auto Strength",function(Value)
+_G.auto1 = Value
+while _G.auto1 == true do
+    wait()
+local args = {
+    [1] = "Strength"
+}
+
+game:GetService("ReplicatedStorage").Events.Train:FireServer(unpack(args))
+end
+end,false)
+
+local Toggle2 = Section.NewToggle("Auto Endurance",function(Value)
+_G.auto2 = Value
+while _G.auto2 == true do
+    wait()
+local args = {
+    [1] = "Endurance"
+}
+
+game:GetService("ReplicatedStorage").Events.Train:FireServer(unpack(args))
+end
+end,false)
+
+local Toggle3 = Section.NewToggle("Auto Endurance",function(Value)
+_G.auto3 = Value
+while _G.auto3 == true do
+    wait()
+local args = {
+    [1] = "Psychic"
+}
+
+game:GetService("ReplicatedStorage").Events.Train:FireServer(unpack(args))
+end
+end,false)
+
+local Button = Section.NewButton("Anti-AFK",function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/LoadstringypVvhJBq4QNz", true))()
+end)
