@@ -83,21 +83,21 @@ local RayfieldLibrary = {
 			ElementStroke = Color3.fromRGB(69, 22, 22),
 			SecondaryElementStroke = Color3.fromRGB(69, 22, 22), -- For labels and paragraphs
 
-			SliderBackground = Color3.fromRGB(31, 159, 71),
-			SliderProgress = Color3.fromRGB(31, 159, 71),
-			SliderStroke = Color3.fromRGB(42, 216, 94),
+			SliderBackground = Color3.fromRGB(69, 22, 22),
+			SliderProgress = Color3.fromRGB(69, 22, 22),
+			SliderStroke = Color3.fromRGB(69, 22, 22),
 
-			ToggleBackground = Color3.fromRGB(170, 203, 60),
-			ToggleEnabled = Color3.fromRGB(32, 214, 29),
-			ToggleDisabled = Color3.fromRGB(100, 22, 23),
-			ToggleEnabledStroke = Color3.fromRGB(17, 255, 0),
-			ToggleDisabledStroke = Color3.fromRGB(65, 8, 8),
-			ToggleEnabledOuterStroke = Color3.fromRGB(0, 170, 0),
-			ToggleDisabledOuterStroke = Color3.fromRGB(170, 0, 0),
+			ToggleBackground = Color3.fromRGB(69, 22, 22),
+			ToggleEnabled = Color3.fromRGB(69, 22, 22),
+			ToggleDisabled = Color3.fromRGB(69, 22, 22),
+			ToggleEnabledStroke = Color3.fromRGB(69, 22, 22),
+			ToggleDisabledStroke = Color3.fromRGB(69, 22, 22),
+			ToggleEnabledOuterStroke = Color3.fromRGB(69, 22, 22),
+			ToggleDisabledOuterStroke = Color3.fromRGB(69, 22, 22),
 
-			InputBackground = Color3.fromRGB(31, 159, 71),
-			InputStroke = Color3.fromRGB(19, 65, 31),
-			PlaceholderColor = Color3.fromRGB(178, 178, 178)
+			InputBackground = Color3.fromRGB(69, 22, 22),
+			InputStroke = Color3.fromRGB(69, 22, 22),
+			PlaceholderColor = Color3.fromRGB(69, 22, 22)
 		}
 	}
 }
