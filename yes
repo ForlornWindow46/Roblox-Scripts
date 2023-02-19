@@ -1,4 +1,5 @@
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+getgenv().Amount = 1
 local Window = Rayfield:CreateWindow({
     Name = "Forlorn Hub",
     LoadingTitle = "Forlorn Hub Loading",
@@ -24,22 +25,33 @@ local Window = Rayfield:CreateWindow({
         Key = "Forlornicus"
     }
 })
-local Tab = Window:CreateTab("Red Bird/PSZ")
+local Tab = Window:CreateTab("Red Bird Gems Script")
 local Main = Tab:CreateSection("Main")
 local Toggle = Tab:CreateButton({
-   Name = "Give Max Gems",
+   Name = "Give Gems",
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
 local args = {
     [1] = {
-        [1] = "-100000000000000",
-        [2] = "0",
+        [1] = -getgenv().Amount,
+        [2] = "100",
         [3] = "1021"
     }
 }
-workspace:FindFirstChild("ROBLOX RULES YES").__REMOTES:FindFirstChild("exclusive shop egg"):InvokeServer(unpack(args))
 
+workspace:FindFirstChild("ROBLOX RULES YES").__REMOTES:FindFirstChild("exclusive shop egg"):InvokeServer(unpack(args))
    end,
 })
+
+local Input = Tab:CreateInput({
+   Name = "Gems Amount",
+   PlaceholderText = "Amount?",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       getgenv().Amount = Text
+   end,
+})
+
+local Label = Tab:CreateLabel("Will Reset to 99T sometimes")
 Rayfield:LoadConfiguration()
