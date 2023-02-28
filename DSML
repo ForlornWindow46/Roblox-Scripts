@@ -1,0 +1,78 @@
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+local Window = Rayfield:CreateWindow({
+   Name = "Destruction Sim",
+   LoadingTitle = "Forlorn Hub",
+   LoadingSubtitle = "By ForlornW46#9306",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil,
+      FileName = "Forlorn Hub"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "",
+      RememberJoins = true 
+   },
+   KeySystem = false,
+   KeySettings = {
+      Title = "Sirius Hub",
+      Subtitle = "Key System",
+      Note = "Destruction Sim",
+      FileName = "SiriusKey",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = "Hello"
+   }
+})
+
+local Tab = Window:CreateTab("Stuff")
+local Section = Tab:CreateSection("Money Shit")
+
+getgenv().amount = 1
+getgenv().amount2 = 1
+
+local Button = Tab:CreateButton({
+   Name = "Give",
+   Callback = function()
+       local args = {
+    [1] = "Coins",
+    [2] = 600,
+    [3] = getgenv().amount
+}
+
+game:GetService("ReplicatedStorage").Remotes.generateBoost:FireServer(unpack(args))
+local args = {
+    [1] = "Levels",
+    [2] = 600,
+    [3] = getgenv().amount2
+}
+
+game:GetService("ReplicatedStorage").Remotes.generateBoost:FireServer(unpack(args))
+   end,
+})
+
+local Slider = Tab:CreateSlider({
+   Name = "Coins Amount",
+   Range = {0, 99999999},
+   Increment = 1,
+   Suffix = "Coins",
+   CurrentValue = 0,
+   Flag = "Slider1",
+   Callback = function(Value)
+       getgenv().amount = Value
+   end,
+})
+
+local Slider = Tab:CreateSlider({
+   Name = "Levels Amount",
+   Range = {0, 30},
+   Increment = 1,
+   Suffix = "Levels",
+   CurrentValue = 0,
+   Flag = "Slider1",
+   Callback = function(Value)
+       getgenv().amount2 = Value
+   end,
+})
+
+Rayfield:LoadConfiguration()
