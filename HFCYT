@@ -28,7 +28,7 @@ local Window = Rayfield:CreateWindow({
 	}
 })
  
-local Tab = Window:CreateTab("Gme Name")
+local Tab = Window:CreateTab("How Far Can You Throw")
 local Main = Tab:CreateSection("Main")
 
 local Toggle = Tab:CreateToggle({
