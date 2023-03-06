@@ -1,0 +1,101 @@
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+
+getgenv().option = 1
+ 
+local Window = Rayfield:CreateWindow({
+	Name = "Forlorn Hub",
+	LoadingTitle = "Forlorn Hub Loading",
+	LoadingSubtitle = "by ForlornW46",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = "Forlorn Hub",
+		FileName = "Forlorn Hub"
+	},
+        Discord = {
+        	Enabled = false,
+        	Invite = "",
+        	RememberJoins = false
+        },
+	KeySystem = false,
+	KeySettings = {
+		Title = "Forlorn Hub",
+		Subtitle = "Key System",
+		Note = "Join the discord",
+		FileName = "ForlornKey",
+		SaveKey = true,
+		GrabKeyFromSite = false,
+		Key = "Forlornicus"
+	}
+})
+ 
+local Tab = Window:CreateTab("Gme Name")
+local Main = Tab:CreateSection("Main")
+
+local Toggle = Tab:CreateToggle({
+   Name = "Auto Throw",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       _G.autofarm = Value
+while _G.autofarm == true do
+    wait()
+game:GetService("ReplicatedStorage").Remotes.AttemptThrow:InvokeServer()
+end
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "Auto Rebirth",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       _G.autorebirth = Value
+       while _G.autorebirth == true do
+           wait()
+           game:GetService("ReplicatedStorage").Remotes.RebirthRequest:InvokeServer()
+       end
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "AutoBuy Strength",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       _G.autostrength = Value
+while _G.autostrength == true do
+    wait()
+    local args = {
+    [1] = getgenv().option
+}
+
+game:GetService("ReplicatedStorage").Remotes.BuyStrength:FireServer(unpack(args))
+end
+   end,
+})
+
+local Slider = Tab:CreateSlider({
+   Name = "Rebirth Option",
+   Range = {1, 4},
+   Increment = 1,
+   Suffix = "Option",
+   CurrentValue = 1,
+   Flag = "Slider1",
+   Callback = function(Value)
+       getgenv().option = Value
+   end,
+})
+
+local Toggle = Tab:CreateButton({
+   Name = "Get All Coins",
+   Flag = "Button1",
+   Callback = function(Value)
+       for i,v in pairs(game.Workspace:GetChildren()) do
+    if string.find(v.Name,"Coin") then
+        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,v,0)
+    end
+end
+   end,
+})
+
+Rayfield:LoadConfiguration()
