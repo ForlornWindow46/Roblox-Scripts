@@ -1,0 +1,72 @@
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+getgenv().Amount = 1
+local Window = Rayfield:CreateWindow({
+    Name = "Forlorn Hub",
+    LoadingTitle = "Forlorn Hub Loading",
+    LoadingSubtitle = "by ForlornW46",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "Forlorn Hub",
+        FileName = "Forlorn Hub"
+    },
+        Discord = {
+            Enabled = false,
+            Invite = "",
+            RememberJoins = false
+        },
+    KeySystem = false,
+    KeySettings = {
+        Title = "Forlorn Hub",
+        Subtitle = "Key System",
+        Note = "Join the discord",
+        FileName = "ForlornKey",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = "Forlornicus"
+    }
+})
+local Tab = Window:CreateTab("2 Player Millionaire Tycoon Cash Fucker")
+local Main = Tab:CreateSection("Main")
+local Toggle = Tab:CreateButton({
+   Name = "Give Cash",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local Player = Players.LocalPlayer
+local FakeData = {Name="Dropper1";Class={Upgrade={Value=getgenv().Amount}}}
+local Tycoon = nil
+
+for _, Folder in next, Workspace:WaitForChild("Tycoons"):GetChildren() do
+    if Folder.Values.Owner.Value == Player then
+        Tycoon = Folder
+        break
+    end
+end
+
+local Conn;
+Conn = Tycoon:WaitForChild("Drops").ChildAdded:Connect(function(A)
+    task.wait()
+    if A:IsA("MeshPart") then
+        if Conn ~= nil then
+            Conn:Disconnect()
+            Conn = nil
+        end
+        ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Upgrade"):FireServer(FakeData, A.Name)
+    end
+end)
+   end,
+})
+
+local Input = Tab:CreateInput({
+   Name = "Cash Amount",
+   PlaceholderText = "Amount?",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       getgenv().Amount = Text
+   end,
+})
+Rayfield:LoadConfiguration()
