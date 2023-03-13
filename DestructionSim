@@ -108,6 +108,10 @@ local Toggle = Misc:CreateToggle('AutoSell', false, Color3.fromRGB(0, 125, 255),
     end
 end)
 
+local Toggle = Misc:CreateToggle('Hide BackPack Full', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+    game:GetService("Players").LocalPlayer.PlayerGui.MainUI.StoragePopupFrame.Visible = not Value
+end)
+
 local Slider = LocalPlayer:CreateSlider('WalkSpeed', 0, 750, 50, Color3.fromRGB(0, 125, 255), function(Value)
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
 end)
