@@ -39,7 +39,7 @@ local Window = Rayfield:CreateWindow({
 local Tab = Window:CreateTab("Hatching")
 local Main = Tab:CreateSection("Main")
 local Tab1 = Window:CreateTab("Other")
-local Main1 = Tab:CreateSection("Main")
+local Main1 = Tab1:CreateSection("Main")
 
 local Toggle = Tab:CreateToggle({
    Name = "Auto Hatch",
@@ -90,6 +90,19 @@ local Dropdown = Tab:CreateDropdown({
    Flag = "Dropdown1",
    Callback = function(Option)
        getgenv().Amount = Option
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "Auto Craft All",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       _G.autocraft = Value
+       while _G.autocraft == true do
+           wait()
+           game:GetService("ReplicatedStorage").Marchy.PetRemotes.Generic.CraftAll:FireServer()
+       end
    end,
 })
 
