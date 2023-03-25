@@ -127,7 +127,7 @@ end
 getgenv().Rebirths = 1
 
 local Toggle = Tab1:CreateToggle({
-   Name = "Auto Rebirth",
+   Name = "Auto Rebirth [Not Working]",
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
