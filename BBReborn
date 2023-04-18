@@ -1,0 +1,3512 @@
+local VLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/vep1032/VepStuff/main/VL"))()
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+local inviteModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Discord%20Inviter/Source.lua"))()
+local s = VLib:Window("Forlorn Hub", "Booga Reborn", "FH")
+local playerService = game:GetService("Players")
+local localPlayer = playerService.LocalPlayer
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local workspace = game:GetService("Workspace")
+getgenv().notifColor = Color3.fromRGB(255, 0, 0)
+local function notif(text, duration)
+    local notifModule = getsenv(localPlayer.PlayerScripts["Local Handler"])
+    notifModule.functionBank.CreateNotification(text, getgenv().notifColor, duration)
+end
+local TP = s:Tab("Teleport")
+local Main = s:Tab("Main")
+local Heals = s:Tab("Heals")
+local Comb = s:Tab("Combat")
+local Pl = s:Tab("Player")
+local Farm = s:Tab("Farm")
+local PlantB = s:Tab("Plant - Boxes")
+local ESP = s:Tab("ESP")
+local Inv = s:Tab("Invisible")
+local Pick = s:Tab("Pickup Whitelist")
+local St = s:Tab("Structure")
+
+
+TP:Button("Old God",function()
+    local me = game.Players.LocalPlayer.Character
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(218.935, -140.998, 1079.8)
+    me.Humanoid.Jump = true
+end)
+
+TP:Button("Volcano",function()
+    local me = game.Players.LocalPlayer.Character
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1064, -196, -427)
+    me.Humanoid.Jump = true
+end)
+
+TP:Button("Void TP",function()
+    local TeleportService = game:GetService('TeleportService')
+    local placeID = 11879754496
+    local player = game.Players.LocalPlayer
+    TeleportService:Teleport(placeID, player)
+end)
+
+TP:Button("Game Link",function()
+    local cop = "https://web.roblox.com/games/11879754496/Voidness"
+    setclipboard(tostring(cop))
+end)
+
+Main:Label("Welcome to Forlorn Hub")
+Main:Label("Toggle GUI with Right Ctrl")
+Main:Button("Destroy GUI",function()
+    game:GetService("CoreGui").Library:Destroy()
+end)
+Main:Colorpicker("Notification Color",Color3.fromRGB(255, 0, 0),function(t)
+    getgenv().notifColor = t
+end)
+Main:Button("Credits",function()
+    Notification:Notify(
+        {Title = "Credits", Description = "ForlornW46#9306"},
+        {OutlineColor = getgenv().notifColor,Time = 5, Type = "default"}
+    )
+end)
+
+Main:Colorpicker("Selection Color",Color3.fromRGB(255, 0, 0),function(t)
+    getgenv().slco = t
+end)
+
+Main:Toggle("Selection",function(t)
+    getgenv().sc = t
+    spawn(function()
+        while getgenv().sc == true and wait() do
+            game:GetService("Workspace").SelectionBox.Color3 = getgenv().slco
+        end
+    end)
+end)
+
+Main:Toggle("Hide Name List",function(t)
+    getgenv().tplantc = t
+    spawn(function()
+        while getgenv().tplantc == true and wait() do
+            local plr = game.Players.LocalPlayer
+            local plrr = game.Players.LocalPlayer.Name
+            game:GetService("Players").LocalPlayer.PlayerGui.SecondaryGui.PlayerList.List[plrr].Visible = false
+        end
+    end)
+end)
+
+Main:Toggle("Hide Lvl",function(t)
+    getgenv().goldspa = t
+    spawn(function()
+        if getgenv().goldspa then
+            wait()
+            pcall(
+                function()
+                    game:GetService("Players").RatatuiHelp.PlayerGui.MainGui.Panels.Topbar.EssenceBar.TextLabel.Visible = false
+                end)
+        elseif not getgenv().goldspa then
+            game:GetService("Players").RatatuiHelp.PlayerGui.MainGui.Panels.Topbar.EssenceBar.TextLabel.Visible = true
+        end
+    end)
+end)
+
+Main:Colorpicker("Color",Color3.fromRGB(255, 0, 0),function(t)
+    getgenv().slcos = t
+end)
+
+Main:Toggle("Armor Color (Fake)",function(t)
+    getgenv().ssc = t
+    spawn(function()
+        while getgenv().ssc == true and wait() do
+            local plr = game.Players.LocalPlayer.Character
+            for i, v in pairs(plr:GetDescendants()) do
+            if v.Name:find("Chestplate") or v.Name:find("Leg") or v.Name:find("Shoulder") or v.Name:find("Foot") or v.Name:find("Halo") then
+            for i, c in pairs(v:GetDescendants()) do
+            if c:IsA("Part") then
+            c.Color = getgenv().slcos
+            end
+            end
+            end
+            end
+        end
+    end)
+end)
+
+Main:Colorpicker("Color",Color3.fromRGB(255, 0, 0),function(t)
+    getgenv().slcoss = t
+end)
+
+Main:Toggle("Bag Color (Fake)",function(t)
+    getgenv().sscs = t
+    spawn(function()
+        while getgenv().sscs == true and wait() do
+            local plr = game.Players.LocalPlayer.Character
+            for i, v in pairs(plr:GetDescendants()) do
+            if v.Name:find("Bag") then
+            for i, c in pairs(v:GetDescendants()) do
+            if c:IsA("Part") then
+            c.Color = getgenv().slcoss
+            end
+            end
+            end
+            end
+        end
+    end)
+end)
+
+---HEALS-------------------------------------------------------------------------------------------
+
+-- global variables
+
+_G.AutoBlood = false
+_G.AutoBerries = false
+_G.AutoBluefruit = false
+_G.AutoLemons = false
+_G.AutoJelly = false
+_G.AutoStraw = false
+--x5
+
+_G.AutoBlood5 = false
+_G.AutoBerries5 = false
+_G.AutoBluefruit5 = false
+_G.AutoLemons5 = false
+_G.AutoJelly5 = false
+_G.AutoStraw5 = false
+--x1
+
+_G.AutoBlood1 = false
+_G.AutoBerries1 = false
+_G.AutoBluefruit1 = false
+_G.AutoLemons1 = false
+_G.AutoJelly1 = false
+_G.AutoStraw1 = false
+-- functions
+
+function KeyBindBloodfruit()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+end
+
+function KeyBindBerries()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+end
+
+function KeyBindBluefruit()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+end
+
+function KeyBindStrawBerries()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+end
+
+--x5
+function KeyBindBloodfruit5()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+end
+
+function KeyBindBerries5()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+end
+
+function KeyBindBluefruit5()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+end
+
+function KeyBindStrawBerries5()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+end
+--x1-------------------------------------
+
+function KeyBindBloodfruit1()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit")
+end
+
+function KeyBindBerries1()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry")
+end
+
+function KeyBindBluefruit1()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit")
+end
+
+function KeyBindStrawBerries1()
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry")
+end
+
+function AutoBlood()
+    while _G.AutoBlood == true do
+    if _G.AutoBlood == true then 
+    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit") -- fruit
+     end
+      task.wait()
+   end
+end
+end
+
+function AutoStraw()
+while _G.AutoStraw == true do
+if _G.AutoStraw == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+function AutoBerries()
+while _G.AutoBerries == true do
+    if _G.AutoBerries == true then 
+    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry") -- fruit
+     end
+      task.wait()
+   end
+end
+end
+
+function AutoBluefruit()
+while _G.AutoBluefruit == true do
+    if _G.AutoBluefruit == true then 
+    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit") -- fruit
+     end
+      task.wait()
+   end
+end
+end
+
+function AutoLemons()
+while _G.AutoLemons == true do
+    if _G.AutoLemons == true then 
+    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Lemon") -- fruit
+     end
+      task.wait()
+   end
+end
+end
+
+function AutoJelly()
+while _G.AutoJelly == true do
+    if _G.AutoJelly == true then 
+    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+    game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Jelly") -- fruit
+     end
+      task.wait()
+   end
+end
+end
+
+--x5----------------------------------------------------
+function AutoBlood5()
+while _G.AutoBlood5 == true do
+if _G.AutoBlood5 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+function AutoStraw5()
+while _G.AutoStraw5 == true do
+if _G.AutoStraw5 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry") -- fruit
+end
+task.wait()
+end
+end
+end
+
+function AutoBerries5()
+while _G.AutoBerries5 == true do
+if _G.AutoBerries5 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+function AutoBluefruit5()
+while _G.AutoBluefruit5 == true do
+if _G.AutoBluefruit5 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+function AutoLemons5()
+while _G.AutoLemons5 == true do
+if _G.AutoLemons5 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Lemon") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+function AutoJelly5()
+while _G.AutoJelly5 == true do
+if _G.AutoJelly5 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Jelly") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+--x1------------------------------------------------------------
+
+function AutoBlood1()
+while _G.AutoBlood1 == true do
+if _G.AutoBlood1 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bloodfruit") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+function AutoStraw1()
+while _G.AutoStraw1 == true do
+if _G.AutoStraw1 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Strawberry") -- fruit
+end
+task.wait()
+end
+end
+end
+
+function AutoBerries1()
+while _G.AutoBerries1 == true do
+if _G.AutoBerries1 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Berry") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+function AutoBluefruit1()
+while _G.AutoBluefruit1 == true do
+if _G.AutoBluefruit1 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Bluefruit") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+function AutoLemons1()
+while _G.AutoLemons1 == true do
+if _G.AutoLemons1 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Lemon") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+function AutoJelly1()
+while _G.AutoJelly1 == true do
+if _G.AutoJelly1 == true then 
+if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer("Jelly") -- fruit
+ end
+  task.wait()
+end
+end
+end
+
+Heals:Label("x1 Speed")
+
+Heals:Toggle("AutoHeal - Bloodfruit",function(Value)
+    _G.AutoBlood1 = Value
+    AutoBlood1()
+end)
+
+Heals:Toggle("AutoHeal - Berries",function(Value)
+    _G.AutoBerries1 = Value
+    AutoBerries1()
+end)
+
+Heals:Toggle("AutoHeal - Bluefruit",function(Value)
+    _G.AutoBluefruit1 = Value
+    AutoBluefruit1()
+end)
+
+Heals:Toggle("AutoHeal - Lemons",function(Value)
+    _G.AutoLemons1 = Value
+    AutoLemons1()
+end)
+
+Heals:Toggle("AutoHeal - Jelly",function(Value)
+    _G.AutoJelly1 = Value
+    AutoJelly1()
+end)
+
+Heals:Toggle("AutoHeal - Strawberry",function(Value)
+    _G.AutoStraw1 = Value
+    AutoStraw1()
+end)
+
+Heals:Label("x4 Speed")
+
+Heals:Toggle("AutoHeal - Bloodfruit",function(Value)
+    _G.AutoBlood = Value
+    AutoBlood()
+end)
+
+Heals:Toggle("AutoHeal - Berries",function(Value)
+    _G.AutoBerries = Value
+    AutoBerries()
+end)
+
+Heals:Toggle("AutoHeal - Bluefruit",function(Value)
+    _G.AutoBluefruit = Value
+    AutoBluefruit()
+end)
+
+Heals:Toggle("AutoHeal - Lemons",function(Value)
+    _G.AutoLemons = Value
+    AutoLemons()
+end)
+
+Heals:Toggle("AutoHeal - Jelly",function(Value)
+    _G.AutoJelly = Value
+    AutoJelly()
+end)
+
+Heals:Toggle("AutoHeal - Strawberry",function(Value)
+    _G.AutoStraw = Value
+    AutoStraw()
+end)
+
+Heals:Label("x5 Speed")
+
+Heals:Toggle("AutoHeal - Bloodfruit",function(Value)
+    _G.AutoBlood5 = Value
+    AutoBlood5()
+end)
+
+Heals:Toggle("AutoHeal - Berries",function(Value)
+    _G.AutoBerries5 = Value
+    AutoBerries5()
+end)
+
+Heals:Toggle("AutoHeal - Bluefruit",function(Value)
+    _G.AutoBluefruit5 = Value
+    AutoBluefruit5()
+end)
+
+Heals:Toggle("AutoHeal - Lemons",function(Value)
+    _G.AutoLemons5 = Value
+    AutoLemons5()
+end)
+
+Heals:Toggle("AutoHeal - Jelly",function(Value)
+    _G.AutoJelly5 = Value
+    AutoJelly5()
+end)
+
+Heals:Toggle("AutoHeal - Strawberry",function(Value)
+    _G.AutoStraw5 = Value
+    AutoStraw5()
+end)
+
+--COMBAT--------------------------------------------------------------------------------------------
+
+Comb:Toggle("Kill Aura",function(t)
+    getgenv().tpclaant = t
+    spawn(function()
+        while getgenv().tpclaant == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = 100, nil
+                        for b, c in pairs(p:GetPlayers()) do
+                            if c ~= p.LocalPlayer and c.Character.HumanoidRootPart then
+                                if
+                                    (n.Position - c.Character.HumanoidRootPart.Position).Magnitude <
+                                        S
+                                 then
+                                    R = c.Character.HumanoidRootPart
+                                    S =
+                                        (n.Position - c.Character.HumanoidRootPart.Position).Magnitude
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+    end)
+end)
+
+Comb:Toggle("Show Aura Hitbox",function(t)
+    getgenv().ancsct = t
+    spawn(function()
+        if getgenv().ancsct then
+            wait()
+            pcall(
+                function()
+                    for i,v in next, game:GetService('Players'):GetPlayers() do
+                        if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+                        pcall(function()
+                        v.Character.HumanoidRootPart.Size = Vector3.new(13, 13, 13)
+                        v.Character.HumanoidRootPart.Transparency = 0.4
+                        v.Character.HumanoidRootPart.Color = Color3.fromRGB(77, 0, 0)
+                        v.Character.HumanoidRootPart.Material = "Block"
+                        v.Character.HumanoidRootPart.CanCollide = false
+                        end)
+                        end
+                        end
+                end
+            )
+            wait(5)
+        elseif not getgenv().ancsct then
+            for i,v in next, game:GetService('Players'):GetPlayers() do
+                v.Character.HumanoidRootPart.Transparency = 1
+                v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+                end
+            end
+    end)
+end)
+
+Comb:Slider("Range", 8,13,11, function(t)
+   getgenv().hitboxsl = t
+ end)
+ 
+ Comb:Toggle("Hitbox Extender",function(t)
+    getgenv().ancsct = t
+    spawn(function()
+        if getgenv().ancsct then
+            wait()
+            pcall(
+                function()
+
+                    for i,v in next, game:GetService('Players'):GetPlayers() do
+                        if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+                        pcall(function()
+                        v.Character.HumanoidRootPart.Size = Vector3.new(getgenv().hitboxsl, getgenv().hitboxsl, getgenv().hitboxsl)
+                        v.Character.HumanoidRootPart.Transparency = 0.4
+                        v.Character.HumanoidRootPart.Color = Color3.fromRGB(77, 0, 0)
+                        v.Character.HumanoidRootPart.Material = "Block"
+                        v.Character.HumanoidRootPart.CanCollide = false
+                        end)
+                        end
+                        end
+                end
+            )
+            wait(5)
+        elseif not getgenv().ancsct then
+            for i,v in next, game:GetService('Players'):GetPlayers() do
+                v.Character.HumanoidRootPart.Transparency = 1
+                v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+                end
+            end
+    end)
+end)
+
+---Player-------------------------------------------------------------------------------------------
+
+Pl:Slider("Walkspeed", 16,19,16, function(ls)
+    _G.WS = ls;
+    local Humanoid = game:GetService("Players").LocalPlayer.Character.Humanoid;
+    Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+    Humanoid.WalkSpeed = _G.WS;
+    end)
+    Humanoid.WalkSpeed = _G.WS;
+end)
+
+Pl:Slider("Jump Power", 50,65,50, function(t)
+   game.Players.LocalPlayer.Character.Humanoid.JumpPower = t
+end)
+
+Pl:Slider("FOV", 70,120,70, function(t)
+    game:GetService'Workspace'.Camera.FieldOfView = t
+end)
+
+
+Pl:Slider("Slope Angle", 49,89,49, function(t)
+    game.Players.LocalPlayer.Character.Humanoid.MaxSlopeAngle = t
+end)
+
+Pl:Button("No Animation",function()
+    game.Players.LocalPlayer.Character.Humanoid.Animator:Destroy()
+end)
+
+Pl:Toggle("Auto Rebirh Lvl 100",function(t)
+    getgenv().ra = t
+    spawn(function()
+        while getgenv().ra == true and wait() do
+            local plr = game.Players.LocalPlayer.Text
+            if game.Players.LocalPlayer.PlayerGui.SecondaryGui.PlayerList.List[plr].LevelLabel.Text == "100" then
+                game:GetService("ReplicatedStorage").Events.Rebirth:FireServer()
+                end
+        end
+        end)
+end)
+
+Pl:Button("Camera Noclip",function()
+    game:GetService("Workspace").Camera.CameraType = "Track"        
+end)
+Pl:Label("Noclip")
+
+
+Pl:Textbox("Keybind", true,function(t)
+    getgenv().nck = t
+    notif("+Added " .. t, 3)
+end)
+
+Pl:Button("Noclip",function()
+    local plr = game:GetService("Players").LocalPlayer
+    local char = plr.Character
+    local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+    local hum = char:FindFirstChild("HumanoidRootPart")
+    mouse.KeyDown:connect(function(key)
+        if key == getgenv().nck  then
+            loop2 = true
+            while loop2 do
+                hum.CFrame = hum.CFrame + hum.CFrame.lookVector * 4
+                wait()
+            end
+        end
+    end)
+    mouse.KeyUp:connect(function(key)
+        if key == getgenv().nck then
+            loop2 = false
+        end
+end)
+end)
+
+
+
+Pl:Label("Extra")
+
+Pl:Label("Spam")
+
+Pl:Textbox("Item", true,function(t)
+    getgenv().txtss = t
+    notif("Item set to " .. t, 3)
+end)
+
+Pl:Textbox("Keybind", true,function(t)
+    getgenv().tost = t
+    notif("Item set to " .. t, 3)
+end)
+
+Pl:Button("Drop",function()
+
+    local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+    mouse.KeyDown:connect(function(key)
+        if key == getgenv().tost  then
+            loops = true
+            while loops do
+game:GetService("ReplicatedStorage").Events.DropBagItem:FireServer(getgenv().txtss)
+                wait()
+            end
+        end
+    end)
+    mouse.KeyUp:connect(function(key)
+        if key == getgenv().tost then
+            loops = false
+        end
+end)
+end)
+
+
+Pl:Textbox("Text", true,function(t)
+    getgenv().txt = t
+    notif("Item set to " .. t, 3)
+end)
+
+Pl:Textbox("Speed", true,function(t)
+    getgenv().txtspeed = t
+    notif("Item set to " .. t, 3)
+end)
+
+Pl:Textbox("Keybind", true,function(t)
+    getgenv().keybindtxt = t
+    notif("Item set to " .. t, 3)
+end)
+
+Pl:Toggle("Spam",function(t)
+    getgenv().spam = t
+    spawn(function()
+        game.Players.LocalPlayer:GetMouse().KeyDown:Connect(function(key)
+            if key == getgenv().keybindtxt then
+        while getgenv().spam == true and wait(getgenv().txtspeed) do
+            local args = {
+                [1] = getgenv().txt,
+                [2] = "All"
+            }
+            
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args))
+        end
+        end
+        end)
+    end)
+end)
+
+Farm:Label("AFK Eat")
+
+Farm:Textbox("Fruit Name", true,function(t)
+    getgenv().tplanstt = t
+    notif("Item set to " .. t, 3)
+end)
+
+Farm:Toggle("Eat When Health Is 99",function(t)
+    getgenv().tplaant = t
+    spawn(function()
+        while getgenv().tplaant == true and wait() do
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").Health< 100 then
+                for i=1, 1 do
+                game:GetService("ReplicatedStorage").Events.UseBagItem:FireServer(getgenv().tplanstt)
+                wait(2)
+                end
+                end
+        end
+    end)
+end)
+
+Farm:Label("Plant")
+
+Farm:Textbox("Plant Name", true,function(t)
+    getgenv().tplantt = t
+    notif("Item set to " .. t, 3)
+end)
+
+Farm:Slider("Slider", 1,60,1, function(t)
+    getgenv().magnitude = t
+end)
+
+Farm:Toggle("Auto Plant",function(t)
+    getgenv().tplant = t
+    spawn(function()
+        while getgenv().tplant == true and wait(2) do
+            for _, v in pairs(game:GetService("Workspace").Deployables:GetChildren()) do
+                if v.Name == "Plant Box" and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude < getgenv().magnitude then
+                    game.ReplicatedStorage.Events.InteractStructure:FireServer(v, getgenv().tplantt)
+                end
+            end
+        end
+    end)
+end)
+
+Farm:Label("Harverest")
+
+Farm:Textbox("Bush Name", true,function(t)
+    getgenv().paso = t
+    notif("Harverest " .. t, 3)
+end)
+
+Farm:Slider("Slider", 1,60,1, function(t)
+    getgenv().magnitudepaso = t
+end)
+
+Farm:Toggle("Harverest",function(t)
+    getgenv().hplant = t
+    spawn(function()
+        while getgenv().hplant == true and wait(1) do
+            for i, v in pairs(game.Workspace:GetChildren()) do
+                if v.Name == getgenv().paso then
+                for i, c in pairs(v:GetChildren()) do
+                if c:IsA("Part") then
+                if (c.Position - game:GetService("Players").LocalPlayer.Character.UpperTorso.Position).magnitude < getgenv().magnitudepaso then
+                game:GetService("ReplicatedStorage").Events.Pickup:FireServer(v)
+                end
+                end
+                end
+                end
+                end
+        end
+    end)
+end)
+
+Farm:Toggle("Make Coin / To the nearest Coin Press",function(t)
+    getgenv().makecoin = t
+    spawn(function()
+        while getgenv().makecoin == true and wait() do
+            for i=1, 5 do
+                for i, v in pairs(game.Workspace.Deployables:GetChildren()) do
+                if v.Name == "Coin Press" then
+                if (v.PrimaryPart.Position - game:GetService("Players").LocalPlayer.Character.UpperTorso.Position).magnitude < 20 then
+                local item = "Gold"
+                game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, item)
+                game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, item)
+                game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, item)
+                game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, item)
+                game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, item)
+
+                wait(0.001)
+                end
+                end
+                end
+                end
+        end
+    end)
+end)
+
+
+
+Farm:Label("TP Points")
+
+Farm:Toggle("Rec TP",function(t)
+    getgenv().tp1c = t
+    spawn(function()
+            _G.SetFarmPos = t
+	     
+            if _G.SetFarmPos then
+                print("wsp")
+                n = 1
+           _G.farmarray = {}
+            end
+           while _G.SetFarmPos and wait(.5) do
+               print(n)
+           _G.farmarray[n] =  game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame
+           n = n + 1 
+           end
+    end)
+end)
+
+Farm:Toggle("Start TP Points",function(Value)
+            _G.autofarmfruit = Value
+            _G.farmarraylength = #(_G.farmarray)
+                print("Farm array length = ", farmarraylength)
+            while _G.autofarmfruit and wait() do
+    for i = 1, _G.farmarraylength do
+        if _G.autofarmfruit == false then
+            i = 0 
+            _G.farmarraylength = 0
+        end
+        
+        print(i)
+        print(_G.farmarraylength)
+        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = _G.farmarray[i]
+        wait(.8)
+    
+    end  
+    end
+end)
+
+Farm:Label("Another Method Of Positions")
+
+Farm:Button("Position - 1",function()
+    D = nil
+    wait()
+    D = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 2",function()
+    E = nil
+    wait()
+    E = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 3",function()
+    F = nil
+    wait()
+    F = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 4",function()
+    G = nil
+    wait()
+    G = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 5",function()
+    H = nil
+    wait()
+    H = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 6",function()
+    I = nil
+    wait()
+    I = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 7",function()
+    J = nil
+    wait()
+    J = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 8",function()
+    K = nil
+    wait()
+    K = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 9",function()
+    L = nil
+    wait()
+    L = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 10",function()
+    M = nil
+    wait()
+    M = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 11",function()
+    N = nil
+    wait()
+    N = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 12",function()
+    O = nil
+    wait()
+    O = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 13",function()
+    P = nil
+    wait()
+    P = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 14",function()
+    Q = nil
+    wait()
+    Q = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 15",function()
+    R = nil
+    wait()
+    R = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 16",function()
+    S = nil
+    wait()
+    S = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 17",function()
+    T = nil
+    wait()
+    T = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 18",function()
+    U = nil
+    wait()
+    U = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 19",function()
+    V = nil
+    wait()
+    V = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 20",function()
+    W = nil
+    wait()
+    W = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 21",function()
+    X = nil
+    wait()
+    X = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 22",function()
+    Y = nil
+    wait()
+    Y = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Button("Position - 23",function()
+    Z = nil
+    wait()
+    Z = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
+end)
+
+Farm:Toggle("Start TP",function(m)
+    getgenv().autotpselectedposv3 = m
+    if m then
+        spawn(
+            function()
+                while autotpselectedposv3 do
+                    wait()
+                    pcall(
+                        function()
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = D
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = E
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = F
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = G
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = H
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = I
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = J
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = K
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = L
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = M
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = O
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = P
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = Q
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = R
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = S
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = T
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = U
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = V
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = W
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = X
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = Y
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                            wait(w)
+                            local n = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            local u = Z
+                            local v = 10
+                            local w =
+                                math.round(math.abs((n.Position - u.Position).Magnitude)) / tonumber(v)
+                            local x =
+                                game:GetService("TweenService"):Create(
+                                n,
+                                TweenInfo.new(tonumber(w), Enum.EasingStyle.Linear),
+                                {CFrame = u}
+                            )
+                            x:Play()
+                        end
+                    )
+                end
+            end
+        )
+end
+end)
+
+Farm:Label("Aura")
+
+Farm:Toggle("Aura - Feather Bush",function(t)
+    getgenv().aura34 = t
+    spawn(function()
+        while getgenv().aura34 == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Feather Bush") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+    end)
+end)
+
+Farm:Toggle("Aura - Sun Tree",function(t)
+    getgenv().aura3 = t
+    spawn(function()
+        while getgenv().aura3 == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Sun Tree") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+    end)
+end)
+
+Farm:Toggle("Aura - Gold Node And Ice Chunk",function(t)
+    getgenv().aura4 = t
+    spawn(function()
+        while getgenv().aura4 == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Gold Node") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+end)
+getgenv().aura5 = t
+if t then
+spawn(
+    function()
+        while getgenv().aura5 do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Ice Chunk") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+    end)
+    end
+end)
+end
+end)
+
+Farm:Toggle("Aura - Gold Node",function(t)
+    getgenv().aura6 = t
+    spawn(function()
+        while getgenv().aura6 == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Gold Node") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+    end)
+end)
+
+Farm:Toggle("Aura - Old God",function(t)
+    getgenv().aura7 = t
+    spawn(function()
+        while getgenv().aura7 == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Old God") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+    end)
+end)
+
+Farm:Toggle("Aura - Hateful God",function(t)
+    getgenv().aura8 = t
+    spawn(function()
+        while getgenv().aura8 == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Hateful God") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+    end)
+end)
+
+Farm:Toggle("Aura - Miserable God",function(t)
+    getgenv().aura9 = t
+    spawn(function()
+        while getgenv().aura9 == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Miserable God") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+    end)
+end)
+
+Farm:Toggle("Aura - Wealthy God",function(t)
+    getgenv().aura10 = t
+    spawn(function()
+        while getgenv().aura10 == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Wealthy God") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+    end)
+end)
+
+Farm:Toggle("Aura - Ancient Tree",function(t)
+    getgenv().aura11 = t
+    spawn(function()
+        while getgenv().aura11 == true and wait() do
+            wait()
+            pcall(
+                function()
+                    local p = game:GetService("Players")
+                    local n = p.LocalPlayer.Character.HumanoidRootPart
+                    local q = game:GetService("Workspace")
+                    local o = game:GetService("ReplicatedStorage")
+                    function getNear()
+                        local R
+                        local S = math.huge, nil
+                        for b, c in pairs(game.workspace:GetChildren()) do
+                            if c.Name:find("Ancient Tree") then
+                                if c:FindFirstChildWhichIsA("BasePart") then
+                                    if
+                                        not c:FindFirstChild("Humanoid") and
+                                            c:FindFirstChild("Health")
+                                     then
+                                        if
+                                            (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude <
+                                                S
+                                         then
+                                            R = c:FindFirstChildWhichIsA("BasePart")
+                                            S =
+                                                (n.Position -
+                                                c:FindFirstChildWhichIsA("BasePart").Position).Magnitude
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                        return R
+                    end
+                    local U = getNear()
+                    local ac = {}
+                    for b, c in pairs(U.Parent:GetChildren()) do
+                        if c:IsA("BasePart") then
+                            table.insert(ac, c)
+                        end
+                    end
+                    game:GetService("ReplicatedStorage").Events.SwingTool:FireServer(
+                        o.RelativeTime.Value,
+                        ac
+                    )
+                end
+            )
+        end
+    end)
+end)
+
+
+Farm:Textbox("Fuel Name | Wood, Leave, Log, Coal", true,function(t)
+    getgenv().itemfuel3 = t
+    notif("Added Fuel | " .. t, 3)
+end)
+
+Farm:Textbox("Auto Fuel (<)", true,function(t)
+    getgenv().itemfuel22 = t
+    notif("Added > " .. t, 3)
+end)
+
+Farm:Toggle("Auto Fuel",function(t)
+    getgenv().autofueal = t
+    spawn(function()
+        while getgenv().autofueal == true and wait() do
+            for i, v in pairs(game:GetService("Workspace").Deployables:GetChildren()) do
+                if v.Name == "Campfire" then
+                    if (v.PrimaryPart.Position - game:GetService("Players").LocalPlayer.Character.UpperTorso.Position).magnitude < 60 then
+            local camp = v.Board.Billboard.Backdrop.TextLabel
+            if camp.Text < getgenv().itemfuel22 then
+            game:GetService("ReplicatedStorage").Events.lnteractStructure:FireServer(v, getgenv().itemfuel3)
+            end
+            end
+            end
+            end
+        end
+    end)
+end)
+
+PlantB:Button("1 x 1",function()
+    local LocalPlayer = game:GetService("Players").LocalPlayer
+    local RootPart = LocalPlayer.Character.HumanoidRootPart
+    local cframe = RootPart.CFrame
+    local Remote = game:GetService("ReplicatedStorage").Events.PlaceStructure
+    
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 1), 2)
+end)
+
+PlantB:Button("2 x 2",function()
+    local LocalPlayer = game:GetService("Players").LocalPlayer
+    local RootPart = LocalPlayer.Character.HumanoidRootPart
+    local cframe = RootPart.CFrame
+    local Remote = game:GetService("ReplicatedStorage").Events.PlaceStructure
+    
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 1), 2)
+end)
+
+PlantB:Button("3 x 3",function()
+    local LocalPlayer = game:GetService("Players").LocalPlayer
+    local RootPart = LocalPlayer.Character.HumanoidRootPart
+    local cframe = RootPart.CFrame
+    local Remote = game:GetService("ReplicatedStorage").Events.PlaceStructure
+    
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 14), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 14), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 14), 2)
+end)
+
+PlantB:Button("4 x 4",function()
+    local LocalPlayer = game:GetService("Players").LocalPlayer
+    local RootPart = LocalPlayer.Character.HumanoidRootPart
+    local cframe = RootPart.CFrame
+    local Remote = game:GetService("ReplicatedStorage").Events.PlaceStructure
+    
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 14), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 21), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 14), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 21), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 14), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 21), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-21, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-21, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-21, -2.5, 14), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-21, -2.5, 21), 2)
+end)
+
+PlantB:Button("5 x 5",function()
+    local LocalPlayer = game:GetService("Players").LocalPlayer
+    local RootPart = LocalPlayer.Character.HumanoidRootPart
+    local cframe = RootPart.CFrame
+    local Remote = game:GetService("ReplicatedStorage").Events.PlaceStructure
+    
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -14), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 14), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, -7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, -14), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-7, -2.5, 14), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, -7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, -14), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-14, -2.5, 14), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(7, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(7, -2.5, -7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(7, -2.5, -14), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(7, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(7, -2.5, 14), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(14, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(14, -2.5, -7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(14, -2.5, -14), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(14, -2.5, 7), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(14, -2.5, 14), 2)
+end)
+
+PlantB:Button("11 x 7",function()
+    local LocalPlayer = game:GetService("Players").LocalPlayer
+    local RootPart = LocalPlayer.Character.HumanoidRootPart
+    local cframe = RootPart.CFrame
+    local Remote = game:GetService("ReplicatedStorage").Events.PlaceStructure
+    
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 43), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, 1), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, 8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, 8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, 8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, 8), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, 15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, 15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, 15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, 15), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, 22), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, 29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, 29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, 29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, 29), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, 36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, 36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, 36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, 36), 2)
+
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, 43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, 43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, 43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, 43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-39, -2.5, 43), 2)
+
+
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, 8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, 15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, 29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, 36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, 43), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, 1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, 1), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, 8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, 8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, 8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, 8), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, 15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, 15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, 15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, 15), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, 22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, 22), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, 29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, 29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, 29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, 29), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, 36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, 36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, 36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, 36), 2)
+
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, 43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, 43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, 43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, 43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(37, -2.5, 43), 2)
+-- frente sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -43), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, -1), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, -8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, -8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, -8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, -8), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, -15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, -15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, -15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, -15), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-1, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, -22), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, -29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, -29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, -29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, -29), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, -36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, -36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, -36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, -36), 2)
+
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-8, -2.5, -43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-15, -2.5, -43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-23, -2.5, -43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-31, -2.5, -43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(-39, -2.5, -43), 2)
+
+
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, -8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, -15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, -29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, -36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, -43), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, -1), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, -1), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, -8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, -8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, -8), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, -8), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, -15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, -15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, -15), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, -15), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(1, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, -22), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, -22), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, -29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, -29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, -29), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, -29), 2)
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, -36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, -36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, -36), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, -36), 2)
+
+
+    Remote:FireServer("Plant Box", cframe * CFrame.new(6, -2.5, -43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(13, -2.5, -43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(21, -2.5, -43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(29, -2.5, -43), 2)
+    Remote:FireServer("Plant Box", cframe * CFrame.new(37, -2.5, -43), 2)
+end)
+
+function espnombre()
+    for i, v in pairs(game.Players:GetPlayers()) do
+        if not v:FindFirstChildWhichIsA("BillboardGui") then
+        if v~= game.Players.LocalPlayer then
+        local ap = Instance.new("BillboardGui", v)
+        local ep = Instance.new("TextLabel", ap)
+        ap.Parent = v.Character.Head
+        ap.Name = v.Name
+        ap.ResetOnSpawn = false
+        ap.AlwaysOnTop = true
+        ap.LightInfluence = 0
+        ap.Size = UDim2.new(0, 10, 0, 10)
+        ep.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        ep.Text = v.Name
+        ep.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+        ep.BorderSizePixel = 4
+        ep.BorderColor3 = Color3.new(255, 255, 255)
+        ep.BorderSizePixel = 0
+        ep.Font = "Code"
+        ep.TextSize = 15
+        ep.TextColor3 = Color3.fromRGB(255, 255, 255)                  
+        ep.TextStrokeTransparency = 0
+        ep.TextYAlignment = "Bottom"
+        end
+        end
+    end
+end
+
+function cancelesp()
+    for i, v in pairs(game.Players:GetPlayers()) do
+        if v~= game.Players.LocalPlayer then
+        for i, c in pairs(v.Character.Head:GetDescendants()) do
+        if c.Name:find(v.Name) then
+        c:Destroy()
+        end
+        end
+        wait(0.1)
+    end
+end
+end
+
+ESP:Toggle("Show Name",function(t)
+    getgenv().ename = t
+    spawn(function()
+        if getgenv().ename then
+            wait()
+            pcall(
+                function()
+                    espnombre()
+                end)
+        elseif not getgenv().ename then
+cancelesp()
+        end
+    end)
+end)
+
+ESP:Label("Item's")
+
+ESP:Toggle("Gold",function(t)
+    getgenv().goldsp = t
+    spawn(function()
+        if getgenv().goldsp then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace.Items:GetChildren()) do
+                        if c.Name:find("Gold") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(255, 176, 0)
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                end)
+        elseif not getgenv().goldsp then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace.Items:GetChildren()) do
+                    if c.Name:find("Gold") then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Crystal",function(t)
+    getgenv().goldspa = t
+    spawn(function()
+        if getgenv().goldspa then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace.Items:GetChildren()) do
+                        if c.Name:find("Crystal") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(9, 137, 207)
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                end)
+        elseif not getgenv().goldspa then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace.Items:GetChildren()) do
+                    if c.Name:find("Crystal") then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Essence",function(t)
+    getgenv().goldssp = t
+    spawn(function()
+        if getgenv().goldssp then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace.Items:GetChildren()) do
+                        if c.Name:find("Essence") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(255, 176, 0)
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                end)
+        elseif not getgenv().goldssp then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace.Items:GetChildren()) do
+                    if c.Name:find("Essence") then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Emerald",function(t)
+    getgenv().goldasp = t
+    spawn(function()
+        if getgenv().goldasp then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace.Items:GetChildren()) do
+                        if c.Name:find("Emerald") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(0, 255, 0)
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                end)
+        elseif not getgenv().goldasp then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace.Items:GetChildren()) do
+                    if c.Name:find("Emerald") then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Void Shard",function(t)
+    getgenv().goldsssp = t
+    spawn(function()
+        if getgenv().goldsssp then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace.Items:GetChildren()) do
+                        if c.Name:find("Void Shard") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(123, 0, 123)
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                end)
+        elseif not getgenv().goldsssp then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace.Items:GetChildren()) do
+                    if c.Name:find("Void Shard") then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Jelly",function(t)
+    getgenv().gaoldsp = t
+    spawn(function()
+        if getgenv().gaoldsp then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace.Items:GetChildren()) do
+                        if c.Name:find("Jelly") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(123, 0, 123)
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                end)
+        elseif not getgenv().gaoldsp then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace.Items:GetChildren()) do
+                    if c.Name:find("Jelly") then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Adurite",function(t)
+    getgenv().goldcsp = t
+    spawn(function()
+        if getgenv().goldcsp then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace.Items:GetChildren()) do
+                        if c.Name:find("Adurite") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(151, 0, 0)
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                end)
+        elseif not getgenv().goldcsp then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace.Items:GetChildren()) do
+                    if c.Name:find("Adurite") then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Label("God's")
+
+ESP:Toggle("Ancient Tree",function(t)
+    getgenv().anct = t
+    spawn(function()
+        if getgenv().anct then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetDescendants()) do
+                        if c.Name == "Ancient Tree" then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                local a5 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(255, 255, 255)                                                    
+                                a4.TextStrokeTransparency = 0
+                                a4.TextYAlignment = "Bottom"
+                                a5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                while wait() do
+                                local heal = c.Health.Value
+                                a5.Text = "[HEALTH:"..heal.."]"
+                                a5.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a5.BorderSizePixel = 4
+                                a5.BorderColor3 = Color3.new(255, 255, 255)
+                                a5.BorderSizePixel = 0
+                                a5.Font = "GothamBlack"
+                                a5.TextSize = 15
+                                a5.TextColor3 = Color3.fromRGB(85, 255, 0)                                                    
+                                a5.TextStrokeTransparency = 0
+                                a5.TextYAlignment = "Top"
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+            wait()
+        elseif not getgenv().anct then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace:GetChildren()) do
+                    if c.Name == "Ancient Tree" then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Old God",function(t)
+    getgenv().ancto = t
+    spawn(function()
+        if getgenv().ancto then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetDescendants()) do
+                        if c.Name == "Old God" then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                local a5 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(255, 255, 255)                                                    
+                                a4.TextStrokeTransparency = 0
+                                a4.TextYAlignment = "Bottom"
+                                a5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                while wait() do
+                                local heal = c.Health.Value
+                                a5.Text = "[HEALTH:"..heal.."]"
+                                a5.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a5.BorderSizePixel = 4
+                                a5.BorderColor3 = Color3.new(255, 255, 255)
+                                a5.BorderSizePixel = 0
+                                a5.Font = "GothamBlack"
+                                a5.TextSize = 15
+                                a5.TextColor3 = Color3.fromRGB(85, 255, 0)                                                    
+                                a5.TextStrokeTransparency = 0
+                                a5.TextYAlignment = "Top"
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+            wait()
+        elseif not getgenv().ancto then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace:GetChildren()) do
+                    if c.Name == "Old God" then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Hateful God",function(t)
+    getgenv().ancst = t
+    spawn(function()
+        if getgenv().ancst then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetDescendants()) do
+                        if c.Name == "Hateful God" then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                local a5 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(255, 255, 255)                                                    
+                                a4.TextStrokeTransparency = 0
+                                a4.TextYAlignment = "Bottom"
+                                a5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                while wait() do
+                                local heal = c.Health.Value
+                                a5.Text = "[HEALTH:"..heal.."]"
+                                a5.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a5.BorderSizePixel = 4
+                                a5.BorderColor3 = Color3.new(255, 255, 255)
+                                a5.BorderSizePixel = 0
+                                a5.Font = "GothamBlack"
+                                a5.TextSize = 15
+                                a5.TextColor3 = Color3.fromRGB(85, 255, 0)                                                    
+                                a5.TextStrokeTransparency = 0
+                                a5.TextYAlignment = "Top"
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+            wait()
+        elseif not getgenv().ancst then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace:GetChildren()) do
+                    if c.Name == "Hateful God" then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Miserable God",function(t)
+    getgenv().aanct = t
+    spawn(function()
+        if getgenv().aanct then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetDescendants()) do
+                        if c.Name == "Miserable God" then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                local a5 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(255, 255, 255)                                                    
+                                a4.TextStrokeTransparency = 0
+                                a4.TextYAlignment = "Bottom"
+                                a5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                while wait() do
+                                local heal = c.Health.Value
+                                a5.Text = "[HEALTH:"..heal.."]"
+                                a5.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a5.BorderSizePixel = 4
+                                a5.BorderColor3 = Color3.new(255, 255, 255)
+                                a5.BorderSizePixel = 0
+                                a5.Font = "GothamBlack"
+                                a5.TextSize = 15
+                                a5.TextColor3 = Color3.fromRGB(85, 255, 0)                                                    
+                                a5.TextStrokeTransparency = 0
+                                a5.TextYAlignment = "Top"
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+            wait()
+        elseif not getgenv().aanct then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace:GetChildren()) do
+                    if c.Name == "Miserable God" then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Wealthy God",function(t)
+    getgenv().ansct = t
+    spawn(function()
+        if getgenv().ansct then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetDescendants()) do
+                        if c.Name == "Wealthy God" then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                local a5 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(255, 255, 255)                                                    
+                                a4.TextStrokeTransparency = 0
+                                a4.TextYAlignment = "Bottom"
+                                a5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                while wait() do
+                                local heal = c.Health.Value
+                                a5.Text = "[HEALTH:"..heal.."]"
+                                a5.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a5.BorderSizePixel = 4
+                                a5.BorderColor3 = Color3.new(255, 255, 255)
+                                a5.BorderSizePixel = 0
+                                a5.Font = "GothamBlack"
+                                a5.TextSize = 15
+                                a5.TextColor3 = Color3.fromRGB(85, 255, 0)                                                    
+                                a5.TextStrokeTransparency = 0
+                                a5.TextYAlignment = "Top"
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+            wait()
+        elseif not getgenv().ansct then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace:GetChildren()) do
+                    if c.Name == "Wealthy God" then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Toggle("Lonely God",function(t)
+    getgenv().anct = t
+    spawn(function()
+        if getgenv().anct then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace.Resources:GetDescendants()) do
+                        if c.Name == "Lonely God" then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                local a5 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(255, 255, 255)                                                    
+                                a4.TextStrokeTransparency = 0
+                                a4.TextYAlignment = "Bottom"
+                                a5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                while wait() do
+                                local heal = c.Health.Value
+                                a5.Text = "[HEALTH:"..heal.."]"
+                                a5.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a5.BorderSizePixel = 4
+                                a5.BorderColor3 = Color3.new(255, 255, 255)
+                                a5.BorderSizePixel = 0
+                                a5.Font = "GothamBlack"
+                                a5.TextSize = 15
+                                a5.TextColor3 = Color3.fromRGB(85, 255, 0)                                                    
+                                a5.TextStrokeTransparency = 0
+                                a5.TextYAlignment = "Top"
+                                end
+                            end
+                        end
+                    end
+                end
+            )
+            wait()
+        elseif not getgenv().anct then
+            for b = 1, 10 do
+                for b, c in pairs(game.workspace.Resources:GetChildren()) do
+                    if c.Name == "Lonely God" then
+                        c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                    end
+                end
+                wait(0.1)
+            end
+        end
+    end)
+end)
+
+ESP:Label("Node's")
+
+ESP:Toggle("Gold",function(t)
+    getgenv().anct = t
+    spawn(function()
+        if getgenv().anct then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Gold") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(255, 176, 0)                                                    
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                    end)
+        elseif not getgenv().anct then
+            for b = 1, 10 do
+                for b = 1, 10 do
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Gold") then
+                            c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                        end
+                    end
+                end
+                end
+
+    end
+end)
+end)
+
+ESP:Toggle("Crystal",function(t)
+    getgenv().ansct = t
+    spawn(function()
+        if getgenv().ansct then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Crystal") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(9, 137, 207)                                                    
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                    end)
+        elseif not getgenv().ansct then
+            for b = 1, 10 do
+                for b = 1, 10 do
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Crystal") then
+                            c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                        end
+                    end
+                end
+                end
+
+    end
+end)
+end)
+
+ESP:Toggle("Adurite",function(t)
+    getgenv().ancsct = t
+    spawn(function()
+        if getgenv().ancsct then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Adurite") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(151, 0, 0)                                                    
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                    end)
+        elseif not getgenv().ancsct then
+            for b = 1, 10 do
+                for b = 1, 10 do
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Adurite") then
+                            c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                        end
+                    end
+                end
+                end
+
+    end
+end)
+end)
+
+ESP:Toggle("Iron",function(t)
+    getgenv().ansct = t
+    spawn(function()
+        if getgenv().ansct then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Iron") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(226, 155, 64)                                                    
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                    end)
+        elseif not getgenv().ansct then
+            for b = 1, 10 do
+                for b = 1, 10 do
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Iron") then
+                            c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                        end
+                    end
+                end
+                end
+
+    end
+end)
+end)
+
+ESP:Toggle("Stone",function(t)
+    getgenv().aanct = t
+    spawn(function()
+        if getgenv().aanct then
+            wait()
+            pcall(
+                function()
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Stone") then
+                            if not c:FindFirstChildWhichIsA("BillboardGui") then
+                                local a3 = Instance.new("BillboardGui", c)
+                                local a4 = Instance.new("TextLabel", a3)
+                                a3.Name = c.Name
+                                a3.ResetOnSpawn = false
+                                a3.AlwaysOnTop = true
+                                a3.LightInfluence = 0
+                                a3.Size = UDim2.new(0, 10, 0, 10)
+                                a4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                a4.Text = c.Name
+                                a4.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+                                a4.BorderSizePixel = 4
+                                a4.BorderColor3 = Color3.new(255, 255, 255)
+                                a4.BorderSizePixel = 0
+                                a4.Font = "GothamBlack"
+                                a4.TextSize = 15
+                                a4.TextColor3 = Color3.fromRGB(105, 102, 92)                                                    
+                                a4.TextStrokeTransparency = 0
+                            end
+                        end
+                    end
+                    end)
+        elseif not getgenv().aanct then
+            for b = 1, 10 do
+                for b = 1, 10 do
+                    for b, c in pairs(game.workspace:GetChildren()) do
+                        if c.Name:find("Stone") then
+                            c:FindFirstChildWhichIsA("BillboardGui"):Remove()
+                        end
+                    end
+                end
+                end
+
+    end
+end)
+end)
+--Invisible------------------------------------------------------------------------------------------
+
+Inv:Button("Tool Invisible",function()
+    for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+        if v:IsA("Model") then
+        for i, c in pairs(v:GetDescendants()) do
+        if c.Name == "Part" then
+        c:Destroy()
+        end
+        end
+        end
+        end
+end)
+
+Inv:Button("Armor Invisible",function()
+    for i, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+        if v:IsA("Accessory") then
+        for i, d in pairs(v.Handle:GetDescendants()) do
+        if d.Name == "AccessoryWeld" then
+        d:Destroy()
+        end
+        end
+        end
+        end	
+end)
+
+Inv:Button("Chestplate Invisible",function()
+    local v = game.Players.LocalPlayer
+
+    for i, c in pairs(v.Character:GetDescendants()) do
+    if c.Name:find("Chestplate") then
+    c.Handle.AccessoryWeld:Destroy()
+    end
+    end
+    for i, c in pairs(v.Character:GetDescendants()) do
+    if c.Name:find("Left Shoulder") then
+    c.Handle.AccessoryWeld:Destroy()
+    end
+    end
+    for i, c in pairs(v.Character:GetDescendants()) do
+    if c.Name:find("Right Shoulder") then
+    c.Handle.AccessoryWeld:Destroy()
+    end
+    end
+end)
+
+Inv:Button("Legs Invisible",function()
+    local v = game.Players.LocalPlayer
+
+    for i, c in pairs(v.Character:GetDescendants()) do
+    if c.Name:find("Legs") then
+    c.Handle.AccessoryWeld:Destroy()
+    end
+    end
+    local v = game.Players.LocalPlayer
+
+    for i, c in pairs(v.Character:GetDescendants()) do
+    if c.Name:find("Legs Foot") then
+    c.Handle.AccessoryWeld:Destroy()
+    end
+    end
+end)
+
+Inv:Button("God Halo Invisible",function()
+    local v = game.Players.LocalPlayer
+    for i, c in pairs(v.Character["God Halo"]:GetDescendants()) do
+    if c.Name == "AccessoryWeld" then
+    c:Destroy()
+    end
+    end
+end)
+
+
+Inv:Button("Bug Firework",function()
+    game.Players.LocalPlayer.Character.Firework.Part.Mesh:Destroy()
+end)
+
+--Pick-----------------------------------------------------------------------------------------------
+
+Pick:Toggle("Pickup Whitelist",function(t)
+    getgenv().pickw = t
+    spawn(function()
+        while getgenv().pickw == true and wait() do
+            pcall(
+                function()
+                    local n = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+                    local o = game:GetService("ReplicatedStorage")
+                    for b, c in pairs(game:GetService("Workspace"):GetChildren()) do
+                        if c:FindFirstChild("Pickup") then
+                            if c:IsA("BasePart") or c:IsA("UnionOpreation") then
+                                if c.Name == getgenv().getitem then
+                                    if (n.Position - c.Position).Magnitude < 50 then
+                                        game:GetService("ReplicatedStorage").Events.Pickup:FireServer(
+                                            c
+                                        )
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    for b, c in pairs(game:GetService("Workspace").Items:GetChildren()) do
+                        if c:FindFirstChild("Pickup") then
+                            if c:IsA("BasePart") or c:IsA("UnionOpreation") then
+                                if c.Name == getgenv().getitem1 or c.Name == getgenv().getitem2 or c.Name == getgenv().getitem3 or c.Name == getgenv().getitem4 or c.Name == getgenv().getitem5 or c.Name == getgenv().getitem6 or c.Name == getgenv().getitem7 then
+                                    if (n.Position - c.Position).Magnitude < 50 then
+                                        game:GetService("ReplicatedStorage").Events.Pickup:FireServer(
+                                            c
+                                        )
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end)
+        end
+    end)
+end)
+
+Pick:Textbox("Whitelist 1", true,function(t)
+    getgenv().getitem1 = t
+    notif("+Added " .. t, 3)
+end)
+
+Pick:Textbox("Whitelist 2", true,function(t)
+    getgenv().getitem2 = t
+    notif("+Added " .. t, 3)
+end)
+
+Pick:Textbox("Whitelist 3", true,function(t)
+    getgenv().getitem3 = t
+    notif("+Added " .. t, 3)
+end)
+
+Pick:Textbox("Whitelist 4", true,function(t)
+    getgenv().getitem4 = t
+    notif("+Added " .. t, 3)
+end)
+
+Pick:Textbox("Whitelist 5", true,function(t)
+    getgenv().getitem5 = t
+    notif("+Added " .. t, 3)
+end)
+
+Pick:Textbox("Whitelist 6", true,function(t)
+    getgenv().getitem6 = t
+    notif("+Added " .. t, 3)
+end)
+
+Pick:Textbox("Whitelist 7", true,function(t)
+    getgenv().getitem7 = t
+    notif("+Added " .. t, 3)
+end)
+
+--------------------STRUCTURES------------------------------------------------------
+
+St:Textbox("Keybind", true,function(t)
+    getgenv().sts = t
+    notif("+Added Keybind " .. t, 3)
+end)
+
+St:Button("Hut yourself",function()
+    game.Players.LocalPlayer:GetMouse().KeyDown:Connect(function(key)
+        if key == getgenv().sts then
+
+            local LocalPlayer = game:GetService("Players").LocalPlayer
+            local RootPart = LocalPlayer.Character.HumanoidRootPart
+            local cframe = RootPart.CFrame
+            local Remote = game:GetService("ReplicatedStorage").Events.PlaceStructure
+            
+            Remote:FireServer("Big Ol' Hut", cframe * CFrame.new(-1, -2.5, 1), 2)
+end    
+end)
+end)
+
+St:Textbox("Structure Name", true,function(t)
+    getgenv().structurename = t
+    notif("+Added Name" .. t, 3)
+end)
+
+St:Textbox("Keybind", true,function(t)
+    getgenv().structurekeybind = t
+    notif("+Added Keybind" .. t, 3)
+end)
+
+St:Button("Wall Trap 4 x 4",function()
+    game.Players.LocalPlayer:GetMouse().KeyDown:Connect(function(key)
+        if key == getgenv().structurekeybind then
+      local Event = game:GetService("ReplicatedStorage").Events.PlaceStructure
+      h = game.Players.LocalPlayer.Character.LowerTorso.Position
+      local aa = h.x + 13
+      local bb = h.y - 2
+      local cc = h.z
+      local aaa = h.x - 13
+      local bbb = h.y - 2
+      local ccc = h.z
+      local aaaa = h.x
+      local bbbb = h.y - 2
+      local cccc = h.z + 13
+      local aaaaa = h.x
+      local bbbbb = h.y - 2
+      local ccccc = h.z - 13
+      local k_1 = getgenv().structurename
+      local k_2 = CFrame.new(aaaa, bbbb, cccc, -0.99862951, 9.53660761e-12, 0.0523360483, -9.54969524e-12, 1, 2.71050543e-20, -0.0523360483, 4.99793241e-13, -0.99862951)
+      local k_3 = 177
+      local Event = game:GetService("ReplicatedStorage").Events.PlaceStructure
+      Event:FireServer(k_1, k_2, k_3)
+      local l_1 = getgenv().structurename
+      local l_2 = CFrame.new(aaaaa, bbbbb, ccccc, -0.99862951, 9.53660761e-12, 0.0523360483, -9.54969524e-12, 1, 2.71050543e-20, -0.0523360483, 4.99793241e-13, -0.99862951)
+      local l_3 = 177
+      local Event = game:GetService("ReplicatedStorage").Events.PlaceStructure
+      Event:FireServer(l_1, l_2, l_3)
+      local m_1 = getgenv().structurename
+      local m_2 = CFrame.new(aaa, bbb, ccc, 1.19248806e-08, 3.87430191e-06, -1, 4.62005888e-14, 1, -3.87430191e-06, 1, 0, 1.19248806e-08)
+      local m_3 = 270
+      local Event = game:GetService("ReplicatedStorage").Events.PlaceStructure
+      Event:FireServer(m_1, m_2, m_3)
+      local n_1 = getgenv().structurename
+      local n_2 = CFrame.new(aa, bb, cc, 1.19248806e-08, 3.87430191e-06, -1, 4.62005888e-14, 1, -3.87430191e-06, 1, 0, 1.19248806e-08)
+      local n_3 = 270
+      local Event = game:GetService("ReplicatedStorage").Events.PlaceStructure
+      Event:FireServer(n_1, n_2, n_3)
+end    
+end)
+end)
+
+St:Toggle("Big Ol' Hut Door Noclip",function(t)
+    getgenv().st = t
+    spawn(function()
+        while getgenv().st == true and wait() do
+            for i, v in pairs(game:GetService("Workspace").Deployables:GetChildren()) do
+                if v.Name == "Big Ol' Hut" then
+                if (v.PrimaryPart.Position - game:GetService("Players").LocalPlayer.Character.UpperTorso.Position).magnitude < 50 then
+                v.Door.Transparency = 0.4
+                v.Door.CanCollide = false
+                for i, v in pairs(game:GetService("Workspace").Deployables:GetChildren()) do
+                    if v.Name == "God Hut" then
+                    if (v.PrimaryPart.Position - game:GetService("Players").LocalPlayer.Character.UpperTorso.Position).magnitude < 50 then
+                    v.Door.Transparency = 0.4
+                    v.Door.CanCollide = false
+                    end
+                    end
+                    end
+                end
+                end
+                end
+            end
+        end)
+end)
+
+St:Toggle("Steal Chest",function(t)
+    getgenv().stack = t
+    spawn(function()
+        while getgenv().stack == true and wait() do
+            for i, v in pairs(game:GetService("Workspace").Deployables:GetChildren()) do
+                if v.Name == "Chest" then
+                if (v.PrimaryPart.Position - game:GetService("Players").LocalPlayer.Character.UpperTorso.Position).magnitude < 50 then
+                v.Door.Transparency = 0.4
+                v.Door.CanCollide = false
+                for i, v in pairs(game:GetService("Workspace").Deployables:GetChildren()) do
+                    if v.Name == "Reinforced Chest" then
+                    if (v.PrimaryPart.Position - game:GetService("Players").LocalPlayer.Character.UpperTorso.Position).magnitude < 50 then
+                    v.Door.Transparency = 0.4
+                    v.Door.CanCollide = false
+                    end
+                    end
+                    end
+                end
+                end
+                end
+            end
+        end)
+end)
