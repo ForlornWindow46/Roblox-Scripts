@@ -1,0 +1,79 @@
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+ 
+local Window = Rayfield:CreateWindow({
+	Name = "Forlorn Hub",
+	LoadingTitle = "Forlorn Hub Loading",
+	LoadingSubtitle = "by ForlornW46",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = "Forlorn Hub",
+		FileName = "Forlorn Hub"
+	},
+        Discord = {
+        	Enabled = false,
+        	Invite = "",
+        	RememberJoins = false
+        },
+	KeySystem = false,
+	KeySettings = {
+		Title = "Forlorn Hub",
+		Subtitle = "Key System",
+		Note = "Join the discord",
+		FileName = "ForlornKey",
+		SaveKey = true,
+		GrabKeyFromSite = false,
+		Key = "Forlornicus"
+	}
+})
+ 
+local Tab = Window:CreateTab("Drive World AutoFarmer")
+local Main = Tab:CreateSection("Main")
+
+local Toggle = Tab:CreateButton({
+   Name = "AutoFarm Drift Points",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+      for i, v in pairs(game:GetService("Workspace").Cars:GetChildren()) do
+    if tostring(v.Owner.Value) == game:GetService("Players").LocalPlayer.Name then 
+        while wait(2) do
+        game:GetService("TweenService"):Create(v.Main,TweenInfo.new(1,Enum.EasingStyle.Linear),{CFrame = CFrame.new(0,1000,0)}):Play()
+        wait(0.5)
+        game:GetService("TweenService"):Create(v.Main,TweenInfo.new(1,Enum.EasingStyle.Linear),{CFrame = CFrame.new(0,50,0)}):Play()
+        end
+    end
+end
+   end,
+})
+
+local Toggle = Tab:CreateButton({
+   Name = "AntiAFK",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+      local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+   wait(1)
+   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+Rayfield:Notify({
+   Title = "AntiAFK",
+   Content = "-- Enabled",
+   Duration = 3,
+   Image = 4483362458,
+   Actions = {
+      Ignore = {
+         Name = "Okay!",
+         Callback = function()
+      end
+   },
+},
+})
+   end,
+})
+
+local Label = Tab:CreateLabel("-- Must Be In Any Car! --")
+local Label = Tab:CreateLabel("Get Out Of Car To Stop!")
+
+Rayfield:LoadConfiguration()
