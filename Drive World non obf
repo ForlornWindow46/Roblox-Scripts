@@ -38,10 +38,9 @@ local Toggle = Farm:CreateButton({
    Callback = function(Value)
        for i,v in pairs(workspace.Cars:GetChildren()) do
     if tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
-        while _wait() do
+        while wait() do
             v.Main.CFrame = CFrame.new(0,200,0)
         game:GetService("TweenService"):Create(v.Main,TweenInfo.new(40,Enum.EasingStyle.Linear),{CFrame = CFrame.new(-17.2,32.3,-3.17)}):Play()
-        wait()
         end
     end
 end
