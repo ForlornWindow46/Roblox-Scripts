@@ -26,10 +26,12 @@ local Window = Rayfield:CreateWindow({
 	}
 })
  
-local Tab = Window:CreateTab("Drive World AutoFarmer")
-local Main = Tab:CreateSection("Main")
+local Farm = Window:CreateTab("Farms")
+local Creds = Window:CreateTab("Credits/Info")
+local Main = Farm:CreateSection("Farms")
+local Credits = Creds:CreateSection("Credits")
 
-local Toggle = Tab:CreateButton({
+local Toggle = Farm:CreateButton({
    Name = "AutoFarm Drift Points",
    CurrentValue = false,
    Flag = "Toggle1",
@@ -46,7 +48,37 @@ end
    end,
 })
 
-local Toggle = Tab:CreateButton({
+local Toggle = Farm:CreateButton({
+   Name = "AutoFarm Drift Points [Faster]",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+      for i, v in pairs(game:GetService("Workspace").Cars:GetChildren()) do
+    if tostring(v.Owner.Value) == game:GetService("Players").LocalPlayer.Name then 
+        while wait(1.2) do
+        game:GetService("TweenService"):Create(v.Main,TweenInfo.new(1,Enum.EasingStyle.Linear),{CFrame = CFrame.new(0,1000,0)}):Play()
+        wait(0.5)
+        game:GetService("TweenService"):Create(v.Main,TweenInfo.new(0.6,Enum.EasingStyle.Linear),{CFrame = CFrame.new(0,50,0)}):Play()
+        end
+    end
+end
+   end,
+})
+
+local Toggle = Farm:CreateButton({
+   Name = "Fling Car",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+      for i, v in pairs(game:GetService("Workspace").Cars:GetChildren()) do
+    if tostring(v.Owner.Value) == game:GetService("Players").LocalPlayer.Name then 
+        v.Main.Velocity = Vector3.new(math.random(-2000,2000),math.random(0,600),math.random(-2000,2000))
+    end
+end
+   end,
+})
+
+local Toggle = Farm:CreateButton({
    Name = "AntiAFK",
    CurrentValue = false,
    Flag = "Toggle1",
@@ -72,8 +104,7 @@ Rayfield:Notify({
 })
    end,
 })
-
-local Label = Tab:CreateLabel("-- Must Be In Any Car! --")
-local Label = Tab:CreateLabel("Get Out Of Car To Stop!")
+local Label = Creds:CreateLabel("Get Out Of Car To Stop!")
+local Label2 = Creds:CreateLabel("By ForlornW46#9306")
 
 Rayfield:LoadConfiguration()
