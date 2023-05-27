@@ -79,6 +79,52 @@ end
 })
 
 local Toggle = Farm:CreateButton({
+   Name = "Donut Mode",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       local angularVelocity = 10
+
+for _, car in ipairs(workspace.Cars:GetChildren()) do
+    if car:IsA("Model") and car.Owner.Value == game.Players.LocalPlayer then
+        local part = car:FindFirstChild("Main")
+        if part then
+            local bodyAngularVelocity = Instance.new("BodyAngularVelocity")
+            bodyAngularVelocity.AngularVelocity = Vector3.new(0, angularVelocity, 0)
+            bodyAngularVelocity.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+            bodyAngularVelocity.P = math.huge
+            bodyAngularVelocity.Parent = part
+        end
+    end
+end
+
+   end,
+})
+
+local Toggle = Farm:CreateButton({
+   Name = "Donut Mode [FAST]",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       local angularVelocity = 100
+
+for _, car in ipairs(workspace.Cars:GetChildren()) do
+    if car:IsA("Model") and car.Owner.Value == game.Players.LocalPlayer then
+        local part = car:FindFirstChild("Main")
+        if part then
+            local bodyAngularVelocity = Instance.new("BodyAngularVelocity")
+            bodyAngularVelocity.AngularVelocity = Vector3.new(0, angularVelocity, 0)
+            bodyAngularVelocity.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+            bodyAngularVelocity.P = math.huge
+            bodyAngularVelocity.Parent = part
+        end
+    end
+end
+
+   end,
+})
+
+local Toggle = Farm:CreateButton({
    Name = "AntiAFK",
    CurrentValue = false,
    Flag = "Toggle1",
@@ -104,7 +150,7 @@ Rayfield:Notify({
 })
    end,
 })
-local Label = Creds:CreateLabel("Get Out Of Car To Stop!")
+local Label = Creds:CreateLabel("Respaw Car To Stop!")
 local Label2 = Creds:CreateLabel("By ForlornW46#9306")
 
 Rayfield:LoadConfiguration()
