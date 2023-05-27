@@ -36,29 +36,12 @@ local Toggle = Farm:CreateButton({
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
-      for i, v in pairs(game:GetService("Workspace").Cars:GetChildren()) do
-    if tostring(v.Owner.Value) == game:GetService("Players").LocalPlayer.Name then 
-        while wait(2) do
-        game:GetService("TweenService"):Create(v.Main,TweenInfo.new(1,Enum.EasingStyle.Linear),{CFrame = CFrame.new(0,1000,0)}):Play()
-        wait(0.5)
-        game:GetService("TweenService"):Create(v.Main,TweenInfo.new(1,Enum.EasingStyle.Linear),{CFrame = CFrame.new(0,50,0)}):Play()
-        end
-    end
-end
-   end,
-})
-
-local Toggle = Farm:CreateButton({
-   Name = "AutoFarm Drift Points [Faster]",
-   CurrentValue = false,
-   Flag = "Toggle1",
-   Callback = function(Value)
-      for i, v in pairs(game:GetService("Workspace").Cars:GetChildren()) do
-    if tostring(v.Owner.Value) == game:GetService("Players").LocalPlayer.Name then 
-        while wait(1.2) do
-        game:GetService("TweenService"):Create(v.Main,TweenInfo.new(1,Enum.EasingStyle.Linear),{CFrame = CFrame.new(0,1000,0)}):Play()
-        wait(0.5)
-        game:GetService("TweenService"):Create(v.Main,TweenInfo.new(0.6,Enum.EasingStyle.Linear),{CFrame = CFrame.new(0,50,0)}):Play()
+       for i,v in pairs(workspace.Cars:GetChildren()) do
+    if tostring(v.Owner.Value) == game.Players.LocalPlayer.Name then
+        while _wait() do
+            v.Main.CFrame = CFrame.new(0,200,0)
+        game:GetService("TweenService"):Create(v.Main,TweenInfo.new(40,Enum.EasingStyle.Linear),{CFrame = CFrame.new(-17.2,32.3,-3.17)}):Play()
+        wait()
         end
     end
 end
