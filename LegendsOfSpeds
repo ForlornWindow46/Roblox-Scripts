@@ -1,32 +1,17 @@
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 orbs = 0
 gems = 0
  
 local Window = Rayfield:CreateWindow({
-	Name = "Forlorn Hub",
-	LoadingTitle = "Forlorn Hub Loading",
-	LoadingSubtitle = "by ForlornW46",
-	ConfigurationSaving = {
-		Enabled = true,
-		FolderName = "Forlorn Hub",
-		FileName = "Forlorn Hub"
-	},
-        Discord = {
-        	Enabled = false,
-        	Invite = "",
-        	RememberJoins = false
-        },
-	KeySystem = false,
-	KeySettings = {
-		Title = "Forlorn Hub",
-		Subtitle = "Key System",
-		Note = "Join the discord",
-		FileName = "ForlornKey",
-		SaveKey = true,
-		GrabKeyFromSite = false,
-		Key = "Forlornicus"
-	}
+   Name = "Forlorn hub",
+   LoadingTitle = "Forlorn Hub Loading",
+   LoadingSubtitle = "by ForlornW46",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil,
+      FileName = "Forlorn Hub"
+   },
 })
  
 local Tab = Window:CreateTab("Values")
@@ -34,7 +19,7 @@ local Main = Tab:CreateSection("Main")
 local Tab2 = Window:CreateTab("Auto")
 local Main2 = Tab2:CreateSection("Main")
 local Tab3 = Window:CreateTab("Manual")
-local Main3 = Tab2:CreateSection("Main")
+local Main3 = Tab3:CreateSection("Main")
 
 local Toggle = Tab2:CreateToggle({
    Name = "Auto Collect Orbs",
