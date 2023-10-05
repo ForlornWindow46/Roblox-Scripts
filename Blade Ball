@@ -60,6 +60,16 @@ local Slider1 = Tab:CreateSlider({
    end,
 })
 
+local Keybind = Tab:CreateKeybind({
+   Name = "Change Parry Key",
+   CurrentKeybind = "E",
+   HoldToInteract = false,
+   Flag = "Keybind1",
+   Callback = function(Keybind)
+   	   Remotes:WaitForChild("ParryButtonPress"):Fire()
+   end,
+})
+
 local Slider2 = Tab1:CreateSlider({
    Name = "WalkSpeed [Normal is 36]",
    Range = {0, 100},
@@ -111,7 +121,7 @@ Balls.ChildAdded:Connect(function(Ball)
             local Distance = (Ball.Position - workspace.CurrentCamera.Focus.Position).Magnitude
             local Velocity = (OldPosition - Ball.Position).Magnitude
         
-            if (Distance / Velocity) <= mag then
+            if (Distance * Velocity) <= mag then
                 if enabled then
                 	Remotes:WaitForChild("ParryButtonPress"):Fire()
                 end
