@@ -1,5 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+local spamparry = false
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 Players.LocalPlayer.Character.Humanoid.UseJumpPower = true
@@ -62,11 +64,21 @@ local Slider1 = Tab:CreateSlider({
 
 local Keybind = Tab:CreateKeybind({
    Name = "Change Parry Key",
-   CurrentKeybind = "E",
+   CurrentKeybind = "F",
    HoldToInteract = false,
    Flag = "Keybind1",
    Callback = function(Keybind)
    	   Remotes:WaitForChild("ParryButtonPress"):Fire()
+   end,
+})
+
+local Keybind = Tab:CreateKeybind({
+   Name = "Spam Parry",
+   CurrentKeybind = "E",
+   HoldToInteract = false,
+   Flag = "Keybind1",
+   Callback = function(Keybind)
+   	   spamparry = not spamparry
    end,
 })
 
@@ -109,6 +121,12 @@ local Slider3 = Tab1:CreateSlider({
 local Label1 = Tab2:CreateLabel("K - Hide/Show Gui")
 local Label2 = Tab2:CreateLabel("Made By ForlornW46")
 local Label3 = Tab2:CreateLabel("Auto Parry May Depend On Ping")
+
+game:GetService("RunService").RenderStepped:Connect(function()
+	if spamparry == true then
+		Remotes:WaitForChild("ParryButtonPress"):Fire()
+	end
+end)
 
 Balls.ChildAdded:Connect(function(Ball)
     if not VerifyBall(Ball) then
