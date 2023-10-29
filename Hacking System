@@ -1,0 +1,211 @@
+local hackingmenu
+local ms = game.Players.LocalPlayer:GetMouse()
+local currentObject = nil
+local viewport
+local tool = script.Parent
+local plr = game.Players.LocalPlayer
+local enabled = true
+local ishacking = false
+
+script.Parent.Equipped:Connect(function()
+	hackingmenu = script.Parent.HackingMenu:Clone()
+	hackingmenu.Parent = game.Players[script.Parent.Parent.Name].PlayerGui
+	viewport = hackingmenu.Hack.object
+	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+end)
+
+script.Parent.Unequipped:Connect(function()
+	workspace.Camera.CameraType = Enum.CameraType.Custom
+	hackingmenu:Destroy()
+	currentObject = nil
+	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+	for i,v in pairs(game.Players.LocalPlayer.PlayerGui.stuff:GetChildren()) do
+		if v then
+			v:Destroy()
+		end
+	end
+end)
+
+function hackfailed()
+	viewport.Parent.begin.Text = "HACK_INITIATING"
+	wait(1)
+	viewport.Parent.begin.Text = "AUTHENTICATING"
+	wait(2)
+	viewport.Parent.begin.Text = "BYPASSING_FIREWALL"
+	wait(2)
+	viewport.Parent.begin.Text = "OVERRIDING_DATA"
+	wait(1)
+	viewport.Parent.begin.Text = "BYPASSED"
+	wait(0.5)
+	viewport.Parent.begin.Text = "HACKING"
+	wait(0.5)
+	viewport.Parent.begin.Text = "HACKING."
+	wait(0.5)
+	viewport.Parent.begin.Text = "HACKING.."
+	wait(0.5)
+	viewport.Parent.begin.Text = "HACKING..."
+	wait(0.5)
+	viewport.Parent.begin.Text = "HACK_FAILED"
+	wait(1)
+	viewport.Parent.begin.Text = "BEGIN_HACK"
+	viewport.Parent.hacked.Text = "HACKED: FALSE"
+	currentObject.hacked.Value = false
+	viewport.Parent.destroyhack.Visible = false
+	enabled = true
+end
+
+function hackcomplete()
+	viewport.Parent.begin.Text = "HACK_INITIATING"
+	wait(1)
+	viewport.Parent.begin.Text = "AUTHENTICATING"
+	wait(2)
+	viewport.Parent.begin.Text = "BYPASSING_FIREWALL"
+	wait(2)
+	viewport.Parent.begin.Text = "OVERRIDING_DATA"
+	wait(1)
+	viewport.Parent.begin.Text = "BYPASSED"
+	wait(0.5)
+	viewport.Parent.begin.Text = "HACKING"
+	wait(0.5)
+	viewport.Parent.begin.Text = "HACKING."
+	wait(0.5)
+	viewport.Parent.begin.Text = "HACKING.."
+	wait(0.5)
+	viewport.Parent.begin.Text = "HACKING..."
+	if ishacking then
+		wait(0.5)
+		viewport.Parent.begin.Text = "HACK_FINISHED"
+		wait(1.2)
+		viewport.Parent.begin.Text = "BEGIN_HACK"
+		viewport.Parent.begin.Text = "USE_" .. currentObject.Name
+		viewport.Parent.hacked.Text = "HACKED: TRUE"
+		currentObject.hacked.Value = true
+		viewport.Parent.destroyhack.Visible = true
+	else
+		viewport.Parent.begin.Text = "HACK_FAILED"
+		wait(0.5)
+		viewport.Parent.begin.Text = "BEGIN_HACK"
+	end
+	enabled = true
+end
+
+function callhack(security)
+	if enabled then
+		enabled = false
+		local maththing = math.random(1,100)
+		if security == 1 then
+			hackcomplete()
+		elseif security == 2 then
+			if maththing <= 75 then
+				hackcomplete()
+			else
+				hackfailed()
+			end
+		elseif security == 3 then
+			if maththing <= 50 then
+				hackcomplete()
+			else
+				hackfailed()
+			end
+		elseif security == 4 then
+			if maththing <= 25 then
+				hackcomplete()
+			else
+				hackfailed()
+			end
+		end
+	end
+end
+
+local function updateGui(curTarget)
+	for i,v in pairs(viewport.WorldModel:GetChildren()) do
+		v:Destroy()
+	end
+	currentObject = curTarget
+	local clone = currentObject:Clone()
+	clone.Parent = viewport.WorldModel
+	local cam = Instance.new("Camera", viewport)
+	viewport.CurrentCamera = cam
+	viewport.Parent.name.Text = "OBJECT_NAME: "..string.upper(currentObject.Name)
+
+	local largestSize = clone.Size.X
+	if clone.Size.Y > largestSize then
+		largestSize = clone.Size.Y
+	elseif clone.Size.Z > largestSize then
+		largestSize = clone.Size.Z
+	end
+
+	cam.CFrame = clone.CFrame * CFrame.new(2,2,largestSize * 1.2)
+	cam.CFrame = CFrame.new(cam.CFrame.Position, clone.Position)
+
+	task.spawn(function()
+		while clone do
+			task.wait(1/10)
+			game:GetService("TweenService"):Create(clone,TweenInfo.new(0.1),{CFrame = clone.CFrame * CFrame.Angles(0,math.rad(3),0)}):Play()	
+		end
+	end)
+end
+
+script.Parent.Activated:Connect(function()
+	local currentTarget = ms.Target
+	if tool.Parent == plr.Character and currentObject ~= currentTarget then
+		if currentTarget.Parent == workspace.Hackable then
+			ishacking = false
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+			for i,v in pairs(game.Players.LocalPlayer.PlayerGui.stuff:GetChildren()) do
+				if v then
+					v:Destroy()
+				end
+			end
+			hackingmenu.beep2:Play()
+			updateGui(currentTarget)
+			if currentObject.security.Value == 1 then
+				hackingmenu.Hack.security.Text = "SECURITY: LOW | 100%"
+			elseif currentObject.security.Value == 2 then
+				hackingmenu.Hack.security.Text = "SECURITY: MEDIUM | 75%"
+			elseif currentObject.security.Value == 3 then
+				hackingmenu.Hack.security.Text = "SECURITY: HIGH | 50%"
+			elseif currentObject.security.Value == 4 then
+				hackingmenu.Hack.security.Text = "SECURITY: EXTREME | 25%"
+			end
+			if currentObject.hacked.Value == true then
+				viewport.Parent.destroyhack.Visible = true
+				viewport.Parent.begin.Text = "USE_" .. currentObject.Name
+				viewport.Parent.hacked.Text = "HACKED: TRUE"
+			else
+				viewport.Parent.destroyhack.Visible = false
+				viewport.Parent.begin.Text = "BEGIN_HACK"
+				viewport.Parent.hacked.Text = "HACKED: FALSE"
+			end
+		end
+		viewport.Parent.begin.MouseButton1Click:Connect(function()
+			hackingmenu.beep:Play()
+			if currentObject.hacked.Value == true then
+				require(currentObject:FindFirstChild("hack")).hack()
+			else
+				ishacking = true
+				callhack(currentObject.security.Value)
+			end
+		end)
+		viewport.Parent.destroyhack.MouseButton1Click:Connect(function()
+			hackingmenu.beep:Play()
+			if currentObject.hacked.Value == true then
+				viewport.Parent.destroyhack.Text = "HACK_REMOVING"
+				wait(1)
+				viewport.Parent.destroyhack.Text = "HACK_REMOVED"
+				workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+				for i,v in pairs(game.Players.LocalPlayer.PlayerGui.stuff:GetChildren()) do
+					if v then
+						v:Destroy()
+					end
+				end
+				wait(0.5)
+				viewport.Parent.destroyhack.Visible = false
+				viewport.Parent.destroyhack.Text = "REMOVE_HACK"
+				currentObject.hacked.Value = false
+				viewport.Parent.begin.Text = "BEGIN_HACK"
+				viewport.Parent.hacked.Text = "HACKED: FALSE"
+			end
+		end)
+	end
+end)
