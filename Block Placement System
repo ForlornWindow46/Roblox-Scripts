@@ -1,0 +1,156 @@
+local isplacing = false
+local UIS = game:GetService("UserInputService")
+local RS = game:GetService("RunService")
+local TS = game:GetService("TweenService")
+
+local materials ={
+	[1] = "Asphalt",
+	[2] = "Basalt",
+	[3] = "Brick",
+	[4] = "Cobblestone",
+	[5] = "Concrete",
+	[6] = "CorrodedMetal",
+	[7] = "CrackedLava",
+	[8] = "DiamondPlate",
+	[9] = "Fabric",
+	[10] = "Foil",
+	[11] = "ForceField",
+	[12] = "Glacier",
+	[13] = "Glass",
+	[14] = "Granite",
+	[15] = "Grass",
+	[16] = "Ground",
+	[17] = "Ice",
+	[18] = "LeafyGrass",
+	[19] = "Limestone",
+	[20] = "Marble",
+	[21] = "Metal",
+	[22] = "Mud",
+	[23] = "Neon",
+	[24] = "Pavement",
+	[25] = "Pebble",
+	[26] = "Plastic",
+	[27] = "Rock",
+	[28] = "Salt",
+	[30] = "Sand",
+	[31] = "Sandstone",
+	[32] = "Slate",
+	[33] = "SmoothPlastic",
+	[34] = "Snow",
+	[35] = "Wood",
+	[36] = "WoodPlanks",
+}
+
+local mat = "Plastic"
+local brickcolor = BrickColor.White()
+local size = 2
+local nummat = 1
+local rot = 0
+local part
+local ms = game.Players.LocalPlayer:GetMouse()
+
+local function snapToGrid(position, gridSize, partSize)
+	local snappedX = math.floor(position.X / gridSize + 0.5) * gridSize
+	local snappedY = math.floor(position.Y / gridSize + 0.5) * gridSize
+	local snappedZ = math.floor(position.Z / gridSize + 0.5) * gridSize
+	snappedY = snappedY + (partSize.Y / 2)
+	return Vector3.new(snappedX, snappedY, snappedZ)
+end
+
+function createpart()
+	isplacing = true
+	part = Instance.new("Part")
+	part.Size = Vector3.new(size,size,size)
+	part.Parent = workspace
+	part.Position = snapToGrid(ms.Hit.Position,1,part.Size)
+	part.Transparency = 0.5
+	part.CanCollide = false
+	part.Anchored = true
+	part.CanQuery = false
+	part.Material = Enum.Material[tostring(mat)]
+	part.BrickColor = brickcolor
+end
+
+script.Parent.Parent.Break.MouseButton1Click:Connect(function()
+	if isplacing and part then
+		isplacing = false
+		local tween = TS:Create(part,TweenInfo.new(0.2),{Transparency = 1})
+		tween:Play()
+		tween.Completed:Wait()
+		part:Destroy()
+		part = nil
+	end
+end)
+
+
+script.Parent.MouseButton1Click:Connect(function()
+	if not part then
+		createpart()
+	end
+end)
+
+ms.Button1Down:Connect(function()
+	if isplacing and part then
+		script.Parent.Parent.place:FireServer(snapToGrid(ms.Hit.Position,1,part.Size),part.Size,part.Material,rot,part.BrickColor)
+	end
+end)
+
+UIS.InputBegan:Connect(function(input)
+	if isplacing and part then
+		if input.KeyCode == Enum.KeyCode.R then
+			if rot >= 360 then
+				rot = 0
+			else
+				rot += 90
+			end
+			
+		elseif input.KeyCode == Enum.KeyCode.E then
+			if part.Size.Y <= 6 then
+				part.Size += Vector3.new(2,2,2)
+				size = part.Size.Y
+			end
+			
+		elseif input.KeyCode == Enum.KeyCode.Q then
+			if part.Size.Y > 2 then
+				part.Size -= Vector3.new(2,2,2)
+				size = part.Size.Y
+			end
+			
+		elseif input.KeyCode == Enum.KeyCode.T then
+			nummat += 1
+			mat = materials[nummat]
+			if mat == nil then
+				part.Material = Enum.Material.SmoothPlastic
+			else
+				part.Material = Enum.Material[tostring(mat)]
+			end
+			if nummat == 37 then
+				nummat = 0
+			end
+		elseif input.KeyCode == Enum.KeyCode.Y then
+			part.BrickColor = BrickColor.random()
+			brickcolor = part.BrickColor
+		elseif input.KeyCode == Enum.KeyCode.X or input.KeyCode == Enum.KeyCode.C then
+			isplacing = false
+			local tween = TS:Create(part,TweenInfo.new(0.2),{Transparency = 1})
+			tween:Play()
+			tween.Completed:Wait()
+			part:Destroy()
+			part = nil
+		end
+	end
+	if not isplacing then
+		if input.KeyCode == Enum.KeyCode.Z then
+			if not part then
+				createpart()
+			end
+		end
+	end
+end)
+
+RS.RenderStepped:Connect(function()
+	if isplacing and part then
+		local targetPosition = snapToGrid(ms.Hit.Position,1,part.Size)
+		TS:Create(part, TweenInfo.new(0.1), {CFrame = CFrame.new(Vector3.new(targetPosition.X, targetPosition.Y, targetPosition.Z)) * CFrame.Angles(0, math.rad(rot), 0)}):Play()
+	end
+end)
