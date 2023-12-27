@@ -1,0 +1,25 @@
+local stuff = {}
+
+local function GetWorkspace()
+	table.clear(stuff)
+	for i,v in pairs(workspace:GetDescendants()) do
+		if v:IsA("BasePart") then
+			table.insert(stuff,{
+				[v.Name] = {
+					["Position"] = v.Position,
+					["Size"] = v.Size,
+					["Color3"] = v.Color,
+					["BrickColor"] = v.BrickColor,
+					["Orientation"] = v.Orientation
+				}
+			})
+		end
+	end
+	local tab = {}
+	for i,v in stuff do
+		table.insert(tab,v)
+	end
+	return tab
+end
+
+print(GetWorkspace())
