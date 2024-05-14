@@ -1,0 +1,72 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local uis = game:GetService("UserInputService")
+local hum = game.Players.LocalPlayer.Character.Humanoid
+local speeding = false
+local speedmulti = 1
+local seat = nil
+local speedboost = false
+
+function speed()
+    if speedboost == false then return end
+    repeat
+        if seat then
+            seat.Velocity += seat.CFrame.LookVector * speedmulti
+        end
+        task.wait()
+    until speeding == false
+end
+
+hum.Seated:Connect(function(theseat,cool)
+    seat = cool
+end)
+
+local Window = Rayfield:CreateWindow({
+   Name = "Forlorn Hub",
+   LoadingTitle = "Loading",
+   LoadingSubtitle = "by ForlornW46",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil,
+      FileName = "Forlorn Hub"
+   },
+})
+
+local Tab = Window:CreateTab("Speedy Boi Stuff")
+local Section = Tab:CreateSection("Stuff?")
+
+local Slider = Tab:CreateSlider({
+   Name = "Speed Multi",
+   Range = {1, 15},
+   Increment = 1,
+   Suffix = "X Speed",
+   CurrentValue = 1,
+   Flag = "Slider1",
+   Callback = function(Value)
+        speedmulti = Value
+   end,
+})
+
+local Toggle = Tab:CreateToggle({
+   Name = "Speed Boost [W] or [Up Arrow]",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+        speedboost = Value
+   end,
+})
+
+local Label = Tab:CreateLabel("Restart Script If You Die!")
+
+uis.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.Up then
+        speeding = true
+        speed()
+    end
+end)
+
+uis.InputEnded:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.Up then
+        speeding = false
+    end
+end)
