@@ -19,12 +19,12 @@ end
 function speed()
     repeat
         if hum.SeatPart and not downforce and speedboost then
-            hum.SeatPart.Velocity += hum.SeatPart.CFrame.LookVector * speedmulti
+            hum.SeatPart.Velocity += hum.SeatPart.CFrame.LookVector * (speedmulti / 10)
         elseif hum.SeatPart and downforce then
             if speedboost then
-                hum.SeatPart.Velocity += hum.SeatPart.CFrame.LookVector * speedmulti - Vector3.new(0,downforceamount,0)
+                hum.SeatPart.Velocity += hum.SeatPart.CFrame.LookVector * (speedmulti / 10) - Vector3.new(0,downforceamount/10,0)
             else
-               hum.SeatPart.Velocity += hum.SeatPart.CFrame.LookVector - Vector3.new(0,downforceamount,0) 
+               hum.SeatPart.Velocity += hum.SeatPart.CFrame.LookVector - Vector3.new(0,downforceamount/10,0) 
             end
         end
         task.wait()
@@ -51,9 +51,9 @@ local Section2 = Tab1:CreateSection("Stuff?")
 
 local Slider = Tab:CreateSlider({
    Name = "Speed Multi",
-   Range = {1, 15},
+   Range = {1, 150},
    Increment = 1,
-   Suffix = "X Speed",
+   Suffix = "Boost",
    CurrentValue = 1,
    Flag = "Slider1",
    Callback = function(Value)
@@ -75,9 +75,9 @@ local Slider = Tab1:CreateSlider({
 
 local Slider = Tab:CreateSlider({
    Name = "DownForce Multi",
-   Range = {1, 15},
+   Range = {1, 150},
    Increment = 1,
-   Suffix = "X DownForce",
+   Suffix = "DownForce",
    CurrentValue = 1,
    Flag = "Slider2",
    Callback = function(Value)
