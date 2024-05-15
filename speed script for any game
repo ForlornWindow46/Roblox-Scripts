@@ -16,8 +16,21 @@ function flingcar(velocity)
     end
 end
 
+local Window = Rayfield:CreateWindow({
+   Name = "Forlorn Hub",
+   LoadingTitle = "Loading",
+   LoadingSubtitle = "by ForlornW46",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil,
+      FileName = "Forlorn Hub"
+   },
+})
+
 function speed()
+    if not Rayfield and Window then return end
     repeat
+        if not Rayfield then return end
         if hum.SeatPart and not downforce and speedboost then
             hum.SeatPart.Velocity += hum.SeatPart.CFrame.LookVector * (speedmulti / 10)
         elseif hum.SeatPart and downforce then
@@ -30,17 +43,6 @@ function speed()
         task.wait()
     until speeding == false
 end
-
-local Window = Rayfield:CreateWindow({
-   Name = "Forlorn Hub",
-   LoadingTitle = "Loading",
-   LoadingSubtitle = "by ForlornW46",
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = nil,
-      FileName = "Forlorn Hub"
-   },
-})
 
 local Tab = Window:CreateTab("Main SpeedBoosts")
 local Tab1 = Window:CreateTab("Fun")
@@ -165,12 +167,24 @@ local Button = Tab1:CreateButton({
    end,
 })
 
+local Button = Tab1:CreateButton({
+   Name = "Flip Vehicle",
+   Callback = function()
+        if hum.SeatPart then
+            hum.SeatPart:PivotTo((hum.SeatPart.CFrame * CFrame.new(Vector3.new(0,15,0))) * CFrame.Angles(0,0,0))
+        end
+   end,
+})
+
 local Label = Tab:CreateLabel("Restart Script If You Die!")
 
-uis.InputBegan:Connect(function(input)
+local connection = uis.InputBegan:Connect(function(input)
+    if not Rayfield and Window then return end
     if input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.Up then
         speeding = true
-        speed()
+        if Rayfield then
+            speed()
+        end
     elseif input.KeyCode == Enum.KeyCode.S or input.KeyCode == Enum.KeyCode.Down then
         if hum.SeatPart and instastop then
             hum.SeatPart.Velocity = Vector3.new(0,0,0)
@@ -178,8 +192,15 @@ uis.InputBegan:Connect(function(input)
     end
 end)
 
-uis.InputEnded:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.Up then
+local connection1 = uis.InputEnded:Connect(function(input)
+    if not Rayfield and Window then return end
+    if input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.Up and rayfield then
         speeding = false
     end
+end)
+
+hum.Died:Connect(function()
+    Rayfield:Destroy()
+    connection:Disconnect()
+    connection1:Disconnect()
 end)
