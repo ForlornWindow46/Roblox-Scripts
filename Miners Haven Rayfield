@@ -2,10 +2,13 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local drops = workspace.DroppedParts
 local tyc = nil
+local remotewait = 0.1
 
 _G.waittime = 0.5
 _G.oreboost = false
 _G.autobox = false
+_G.autorebirth = false
+_G.autoremote = false
 
 local baseteslas = {"All For One", "Voided Black Dwarf", "Black Dwarf", "Hyperspace", "Tesla Refuter", "Data Destroyer", "Tesla Resetter", "The Final Upgrader", "One For All", "Prismatic Genesis"}
 
@@ -25,9 +28,15 @@ local main = Window:CreateTab("Main")
 local layouts = Window:CreateTab("Layouts")
 local misc = Window:CreateTab("Misc")
 
-local Section1 = main:CreateSection("Stuff")
-local Section2 = layouts:CreateSection("COMING SOON!")
-local Section3 = misc:CreateSection("Stuff")
+local Section1 = main:CreateSection("Many Things")
+local Section2 = layouts:CreateSection("coming soon!")
+local Section3 = misc:CreateSection("Client/Player Stuff")
+
+local Label = layouts:CreateLabel("Coming Soon!")
+local Label = layouts:CreateLabel("Coming Soon!")
+local Label = layouts:CreateLabel("Coming Soon!")
+local Label = layouts:CreateLabel("Coming Soon!")
+local Label = layouts:CreateLabel("Coming Soon!")
 
 function grabfurnace()
     for _, v in pairs(tyc:GetChildren()) do
@@ -37,6 +46,7 @@ function grabfurnace()
             end
         end
     end
+    return false
 end
 
 local function isTesla(upgName)
@@ -185,10 +195,10 @@ local Slider = main:CreateSlider({
 
 local Slider = main:CreateSlider({
    Name = "Box Grab Wait Time",
-   Range = {0, 10},
+   Range = {0, 5},
    Increment = 0.1,
    Suffix = "sec",
-   CurrentValue = 1,
+   CurrentValue = 0.5,
    Flag = "Slider1",
    Callback = function(Value)
         _G.waittime = Value
@@ -218,6 +228,14 @@ spawn(function()
     end
 end)
 
+spawn(function()
+    while task.wait(1) do
+        if _G.autorebirth then
+            game.ReplicatedStorage.Rebirth:InvokeServer()
+        end
+    end
+end)
+
 local boxes = main:CreateToggle({
    Name = "Auto Grab Boxes",
    CurrentValue = false,
@@ -232,7 +250,7 @@ local orebtoggle = main:CreateToggle({
    CurrentValue = false,
    Flag = "Toggle1",
    Callback = function(Value)
-        if tyc then
+        if tyc and grabfurnace() then
             _G.oreboost = not _G.oreboost
             if _G.oreboost == true then
                 notify("OreBoost Enabled Successfully!, Using " .. grabfurnace())
@@ -241,6 +259,45 @@ local orebtoggle = main:CreateToggle({
             end
         else
             _G.oreboost = false
+            notify("Please Place Down A Furnace And A Mine, then retoggle oreboost!")
         end
+   end,
+})
+
+local boxes = main:CreateToggle({
+   Name = "Auto Rebirth",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+        _G.autorebirth = not _G.autorebirth
+   end,
+})
+
+spawn(function()
+    while task.wait(remotewait) do
+        if _G.autoremote then
+            game.ReplicatedStorage.RemoteDrop:FireServer()
+        end
+    end
+end)
+
+local Slider = main:CreateSlider({
+   Name = "Remote Mine Wait Time",
+   Range = {0, 10},
+   Increment = 0.1,
+   Suffix = "sec",
+   CurrentValue = 0.1,
+   Flag = "Slider1",
+   Callback = function(Value)
+        remotewait = Value
+   end,
+})
+
+local remote = main:CreateToggle({
+   Name = "Auto Remote Mine",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+        _G.autoremote = not _G.autoremote
    end,
 })
