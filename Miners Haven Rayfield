@@ -3,12 +3,14 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local drops = workspace.DroppedParts
 local tyc = nil
 local remotewait = 0.1
+local virtualuser = game:GetService("VirtualUser")
 
 _G.waittime = 0.5
 _G.oreboost = false
 _G.autobox = false
 _G.autorebirth = false
 _G.autoremote = false
+_G.antiafk = false
 
 local baseteslas = {"All For One", "Voided Black Dwarf", "Black Dwarf", "Hyperspace", "Tesla Refuter", "Data Destroyer", "Tesla Resetter", "The Final Upgrader", "One For All", "Prismatic Genesis"}
 
@@ -27,16 +29,20 @@ local Window = Rayfield:CreateWindow({
 local main = Window:CreateTab("Main")
 local layouts = Window:CreateTab("Layouts")
 local misc = Window:CreateTab("Misc")
+local misc = Window:CreateTab("Credits")
 
 local Section1 = main:CreateSection("Many Things")
 local Section2 = layouts:CreateSection("coming soon!")
 local Section3 = misc:CreateSection("Client/Player Stuff")
+local Section4 = credits:CreateSection("Credits")
 
 local Label = layouts:CreateLabel("Coming Soon!")
 local Label = layouts:CreateLabel("Coming Soon!")
 local Label = layouts:CreateLabel("Coming Soon!")
 local Label = layouts:CreateLabel("Coming Soon!")
 local Label = layouts:CreateLabel("Coming Soon!")
+
+local Label = credits:CreateLabel("Made By Forlornicus/ForlornW46")
 
 function grabfurnace()
     for _, v in pairs(tyc:GetChildren()) do
@@ -301,3 +307,24 @@ local remote = main:CreateToggle({
         _G.autoremote = not _G.autoremote
    end,
 })
+
+local remote = misc:CreateToggle({
+   Name = "Anti-AFK",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+        _G.antiafk = not _G.antiafk
+        if _G.antiafk then
+            notify("Anti-AFK Enabled!")
+        else
+            notify("Anti-AFK Disabled!")
+        end
+   end,
+})
+
+game.Players.LocalPlayer.Idled:connect(function()
+    if _G.antiafk then
+        virtualuser:CaptureController()
+        virtualuser:ClickButton2(Vector2.new())
+    end
+end)
