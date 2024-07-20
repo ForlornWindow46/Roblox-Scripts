@@ -11,6 +11,8 @@ _G.autobox = false
 _G.autorebirth = false
 _G.autoremote = false
 _G.antiafk = false
+local layout = "Layout1"
+_G.autoload = false
 
 local baseteslas = {"All For One", "Voided Black Dwarf", "Black Dwarf", "Hyperspace", "Tesla Refuter", "Data Destroyer", "Tesla Resetter", "The Final Upgrader", "One For All", "Prismatic Genesis"}
 
@@ -29,18 +31,57 @@ local Window = Rayfield:CreateWindow({
 local main = Window:CreateTab("Main")
 local layouts = Window:CreateTab("Layouts")
 local misc = Window:CreateTab("Misc")
-local misc = Window:CreateTab("Credits")
+local credits = Window:CreateTab("Credits")
 
 local Section1 = main:CreateSection("Many Things")
-local Section2 = layouts:CreateSection("coming soon!")
 local Section3 = misc:CreateSection("Client/Player Stuff")
 local Section4 = credits:CreateSection("Credits")
 
-local Label = layouts:CreateLabel("Coming Soon!")
-local Label = layouts:CreateLabel("Coming Soon!")
-local Label = layouts:CreateLabel("Coming Soon!")
-local Label = layouts:CreateLabel("Coming Soon!")
-local Label = layouts:CreateLabel("Coming Soon!")
+local Section2 = layouts:CreateSection("layout to load then wait until rebirth [only select one layout]")
+
+local layout1 = layouts:CreateToggle({
+   Name = "Auto Layout Load",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+        _G.autoload = Value
+   end,
+})
+
+local Label = layouts:CreateLabel("Load Layout and wait until get money")
+
+local layout1 = layouts:CreateToggle({
+   Name = "Auto Load Layout 1",
+   CurrentValue = true,
+   Flag = "Toggle1",
+   Callback = function(Value)
+        if Value == true then
+            layout = "Layout1"
+        end
+   end,
+})
+
+local layout1 = layouts:CreateToggle({
+   Name = "Auto Load Layout 2",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+        if Value == true then
+            layout = "Layout2"
+        end
+   end,
+})
+
+local layout1 = layouts:CreateToggle({
+   Name = "Auto Load Layout 3",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+        if Value == true then
+            layout = "Layout3"
+        end
+   end,
+})
 
 local Label = credits:CreateLabel("Made By Forlornicus/ForlornW46")
 
@@ -94,10 +135,10 @@ function upgrade(drop)
             drop.Anchored = true
         end
     end
-    
     drop.Anchored = true
-    task.wait(0.1)
-    drop.CFrame = tyc[grabfurnace()]:FindFirstChild("Model").Lava.CFrame
+    local tween = game:GetService("TweenService"):Create(drop,TweenInfo.new(0.5),{CFrame = tyc[grabfurnace()].Model.Lava.CFrame*CFrame.new(0,1,0)})
+    tween:Play()
+    tween.Completed:Wait()
     drop.Anchored = false
 end
 
@@ -135,10 +176,23 @@ function notify(text)
              Name = "Okay!",
              Callback = function()
             end
+            },
         },
-    },
-})
+    })
 end
+
+spawn(function()
+    while wait(1) do
+        if _G.autoload then
+            if layout == "" then
+                notify("Please Select A Layout To Load")
+            end
+            game.ReplicatedStorage.Layouts:InvokeServer("Load", layout)
+            game.Players.LocalPlayer.Rebirths.Changed:Wait()
+            task.wait(0.5)
+        end
+    end
+end)
 
 spawn(function()
     while wait(1) do
