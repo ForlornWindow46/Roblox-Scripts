@@ -152,7 +152,6 @@ local function createDuplicates()
     for _, upg in ipairs(tyc:GetChildren()) do
         if not isTesla(upg.Name) and upg:FindFirstChild("Model") and upg:FindFirstChild("Model"):FindFirstChild("Upgrade") then
             if not upg.Model.Upgrade:FindFirstChild("Cloned") then
-                print(upg)
                 local decoy = upg.Model.Upgrade:Clone()
                 decoy.Parent = upg.Model
                 decoy.Name = "UpgradeDecoy"
