@@ -1,0 +1,538 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "Forlorn Hub", HidePremium = false, SaveConfig = false, ConfigFolder = "Forlorn Hub"})
+
+local drops = workspace.DroppedParts
+local tyc = nil
+local virtualuser = game:GetService("VirtualUser")
+
+_G.remotewait = 1
+_G.waittime = 0.5
+_G.oreboost = false
+_G.autobox = false
+_G.autorebirth = false
+_G.autoremote = false
+_G.antiafk = false
+_G.autoload = false
+_G.oretracker = false
+
+local function generatestring(length)
+    local charset = "123456789"
+    local result = ""
+    for _ = 1, length do
+        local rand = math.random(1, #charset)
+        result = result .. charset:sub(rand, rand)
+    end
+    return tonumber(result)
+end
+
+getgenv().shouldrun = generatestring(20)
+local string = getgenv().shouldrun
+
+_G.slf = false
+_G.sls = false
+_G.slt = false
+
+local l1 = "Layout1"
+local l2 = "Layout1"
+local l3 = "Layout1"
+
+local baseteslas = {"All For One", "Voided Black Dwarf", "Black Dwarf", "Hyperspace", "Tesla Refuter", "Data Destroyer", "Tesla Resetter", "The Final Upgrader", "One For All", "Prismatic Genesis"}
+
+for i, v in workspace.Tycoons:GetChildren() do
+    if v.Owner.Value == game.Players.LocalPlayer.Name then
+        tyc = v
+    end
+end
+
+local main = Window:MakeTab({
+	Name = "Main",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local layouts = Window:MakeTab({
+	Name = "Layouts",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local misc = Window:MakeTab({
+	Name = "Misc",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local credits = Window:MakeTab({
+	Name = "Credits",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section1 = main:AddSection({Name = "Base"})
+local Section4 = layouts:AddSection({Name = "Layouts"})
+local Section2 = misc:AddSection({Name = "Client/Player"})
+local Section3 = credits:AddSection({Name = "Credits"})
+
+function notify(text)
+    OrionLib:MakeNotification({
+	    Name = "Forlorn Hub",
+	    Content = text,
+	    Image = "rbxassetid://4483345998",
+	    Time = 5
+    })
+end
+
+function convertsn(num)
+    local suffixes = {"", "k", "M", "B", "T", "qd", "Qn", "sx", "Sp", "O", "N", "de", "Ud", "DD", "tdD", "qdD", "QnD", "sxD", "SpD", "OcD", "NvD", "Vgn", "UVg", "DVg", "TVg", "qtV", "QnV", "SeV", "SPG", "OVG", "NVG", "TGN", "UTG", "DTG", "tsTG", "qtTG", "QnTG", "ssTG", "SpTG", "OcTG", "NoTG", "QdDR", "uQDR", "dQDR", "tQDR", "qdQDR", "QnQDR", "sxQDR", "SpQDR", "OQDDr", "NQDDr", "qQGNT", "uQGNT", "dQGNT", "tQGNT", "qdQGNT", "QnQGNT", "sxQGNT", "SpQGNT", "OQQGNT", "NQQGNT", "SXGNTL", "USXGNTL", "DSXGNTL", "TSXGNTL", "QTSXGNTL", "QNSXGNTL", "SXSXGNTL", "SPSXGNTL", "OSXGNTL", "NVSXGNTL", "SPTGNTL", "USPTGNTL", "DSPTGNTL", "TSPTGNTL", "QTSPTGNTL", "QNSPTGNTL", "SXSPTGNTL", "SPSPTGNTL", "OSPTGNTL", "NVSPTGNTL", "OTGNTL", "UOTGNTL", "DOTGNTL", "TOTGNTL", "QTOTGNTL", "QNOTGNTL", "SXOTGNTL", "SPOTGNTL", "OTOTGNTL", "NVOTGNTL", "NONGNTL", "UNONGNTL", "DNONGNTL", "TNONGNTL", "QTNONGNTL", "QNNONGNTL", "SXNONGNTL", "SPNONGNTL", "OTNONGNTL", "NONONGNTL", "CENT", "UNCENT", "inf"}
+    
+    local exponent = math.floor(math.log10(num))
+    local index = math.floor(exponent / 3)
+    
+    if index >= #suffixes then
+        index = #suffixes - 1
+    end
+    
+    local suffix = suffixes[index + 1]
+    local scaledNumber = num / (10 ^ (index * 3))
+    
+    return string.format("%.2f%s", scaledNumber, suffix)
+end
+
+function grabfurnace()
+    for _, v in pairs(tyc:GetChildren()) do
+        if v.ClassName == "Model" and not string.find(v.Name, "Teleport") then
+            if v.Model:FindFirstChild("Lava") then
+                return v.Name
+            end
+        end
+    end
+    return false
+end
+
+local function isTesla(upgName)
+    for _, teslaName in ipairs(baseteslas) do
+        if upgName == teslaName then
+            return true
+        end
+    end
+    return false
+end
+
+function upgrade(drop)
+    if getgenv().shouldrun ~= string then return end
+    drop.Transparency = 1
+    drop.Anchored = false
+    drop.CFrame = CFrame.new(tyc.Base.Position + Vector3.new(0, 40, 0))
+    task.wait(0.1)
+    drop.Anchored = true
+    
+    local usedTeslas = {}
+    for _, teslaName in ipairs(baseteslas) do
+        for _, upg in ipairs(tyc:GetChildren()) do
+            if upg.Name == teslaName and not usedTeslas[teslaName] and upg:FindFirstChild("Model") and upg:FindFirstChild("Model"):FindFirstChild("Upgrade") then
+                drop.Anchored = false
+                drop.CFrame = upg.Model.Upgrade.CFrame
+                task.wait(0.05)
+                drop.Anchored = true
+                usedTeslas[teslaName] = true
+                break
+            end
+        end
+    end
+    
+    for _, upg in ipairs(tyc:GetChildren()) do
+        if not isTesla(upg.Name) and upg:FindFirstChild("Model") and upg:FindFirstChild("Model"):FindFirstChild("Upgrade") then
+            drop.Anchored = false
+            local upgrade = upg.Model.Upgrade
+            drop.CFrame = upgrade.CFrame
+            task.wait(0.05)
+            drop.Anchored = true
+        end
+    end
+    drop.Anchored = true
+    local tween = game:GetService("TweenService"):Create(drop,TweenInfo.new(0.5),{CFrame = tyc[grabfurnace()].Model.Lava.CFrame*CFrame.new(0,1,0)})
+    tween:Play()
+    tween.Completed:Wait()
+    drop.Anchored = false
+end
+
+drops[tyc.Name].ChildAdded:Connect(function(child)
+    if getgenv().shouldrun ~= string then return end
+    if _G.oreboost then
+        upgrade(child)
+    end
+    if _G.oretracker then
+        local tracker = game.ReplicatedStorage.TrackerTypes.Premium:Clone()
+        tracker.Parent = child
+        tracker.Adornee = child
+        task.wait(0.25)
+        local cash = child:WaitForChild("Cash")
+        tracker.Amount.Text = "$" .. tostring(convertsn(cash.Value))
+        child:WaitForChild("Cash").Changed:Connect(function()
+            if getgenv().shouldrun ~= string then return end
+            if tracker and cash then
+                tracker.Amount.Text = "$" .. tostring(convertsn(cash.Value))
+            end
+        end)
+    end
+end)
+
+local function createDuplicates()
+    for _, upg in ipairs(tyc:GetChildren()) do
+        if not isTesla(upg.Name) and upg:FindFirstChild("Model") and upg:FindFirstChild("Model"):FindFirstChild("Upgrade") then
+            if not upg.Model.Upgrade:FindFirstChild("Cloned") then
+                local decoy = upg.Model.Upgrade:Clone()
+                decoy.Parent = upg.Model
+                decoy.Name = "UpgradeDecoy"
+                local tag = Instance.new("StringValue", upg.Model.Upgrade)
+                tag.Name = "Cloned"
+                upg.Model.Upgrade.Transparency = 1
+                upg.Model.Upgrade.Size = Vector3.new(5, 5, 5)
+                upg.Model.Upgrade.CFrame = CFrame.new(tyc.Base.Position + Vector3.new(0, 40, 0))
+            end
+        end
+    end
+end
+
+main:AddSlider({
+	Name = "Conveyor Speed Multi",
+	Min = 0.0,
+	Max = 10.0,
+	Default = 1.0,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 0.1,
+	ValueName = "multi",
+	Callback = function(Value)
+		tyc.AdjustSpeed.Value = Value
+	end    
+})
+
+main:AddColorpicker({
+	Name = "Base Color",
+	Default = Color3.fromRGB(163, 162, 165),
+	Callback = function(Value)
+		tyc.Base.Color = Value
+	end	  
+})
+
+main:AddDropdown({
+	Name = "Base Material",
+	Default = "Slate",
+	Options = {"Brick", "Cobblestone", "Concrete", "CorrodedMetal", "DiamondPlate", "Fabric", "Foil", "Glass", "Granite", "Grass", "Ice", "Marble", "Metal", "Neon", "Pebble", "Plastic", "Sand", "Slate", "SmoothPlastic", "Wood", "WoodPlanks"},
+	Callback = function(Value)
+		tyc.Base.Material = Enum.Material[Value]
+	end    
+})
+
+main:AddButton({
+	Name = "TP to Base",
+	Callback = function()
+      	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(tyc.Base.Position + Vector3.new(0,3.5,0))
+  	end    
+})
+
+local Section5 = main:AddSection({Name = "Boxes"})
+
+main:AddSlider({
+	Name = "Box Grab Wait Time",
+	Min = 0.0,
+	Max = 10.0,
+	Default = 1.0,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 0.1,
+	ValueName = "sec",
+	Callback = function(Value)
+		tyc.AdjustSpeed.Value = Value
+	end    
+})
+
+main:AddButton({
+	Name = "Grab Boxes",
+	Callback = function()
+      	for i,v in pairs(workspace.Boxes:GetChildren()) do
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position)
+            task.wait(_G.waittime)
+        end
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(tyc.Base.Position + Vector3.new(0,3.5,0))
+  	end    
+})
+
+main:AddToggle({
+	Name = "Auto Grab Boxes",
+	Default = false,
+	Callback = function(Value)
+		_G.autobox = Value
+	end    
+})
+
+local Section5 = main:AddSection({Name = "Ores"})
+
+main:AddToggle({
+	Name = "Ore Boost",
+	Default = false,
+	Callback = function(Value)
+		_G.oreboost = Value
+        if _G.oreboost then
+            notify("Ore Boost Enabled!")
+        else
+            notify("Ore Boost Disabled!")
+        end
+	end    
+})
+
+main:AddToggle({
+	Name = "Ore Tracker",
+	Default = false,
+	Callback = function(Value)
+		_G.oretracker = Value
+        if _G.oretacker then
+            notify("Ore Tracker Enabled!")
+        else
+            notify("Ore Tracker Disabled!")
+        end
+	end    
+})
+
+main:AddButton({
+	Name = "Destroy Ores",
+	Callback = function()
+      	for i,v in pairs(workspace.DroppedParts[tyc.Name]:GetChildren()) do
+            v.Position = tyc.Base.Position
+            v.Transparency = 1
+            v.Anchored = false
+        end
+        notify("Destroyed All Ores")
+  	end    
+})
+
+local Section5 = main:AddSection({Name = "Remote Mine"})
+
+main:AddSlider({
+	Name = "Remote Mine Wait Time",
+	Min = 0.0,
+	Max = 10.0,
+	Default = 1.0,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 0.1,
+	ValueName = "sec",
+	Callback = function(Value)
+		_G.remotewait = Value
+	end
+})
+
+main:AddToggle({
+	Name = "Auto Remote Mine",
+	Default = false,
+	Callback = function(Value)
+		_G.autoremote = Value
+	end    
+})
+
+misc:AddSlider({
+	Name = "WalkSpeed",
+	Min = 0.0,
+	Max = 360.0,
+	Default = game.Players.LocalPlayer.Character.Humanoid.WalkSpeed,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "speed",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+	end    
+})
+
+misc:AddSlider({
+	Name = "JumpPower",
+	Min = 0.0,
+	Max = 360.0,
+	Default = game.Players.LocalPlayer.Character.Humanoid.JumpPower,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "power",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+	end    
+})
+
+misc:AddSlider({
+	Name = "FOV",
+	Min = 0.0,
+	Max = 120,
+	Default = workspace.CurrentCamera.FieldOfView,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "fov",
+	Callback = function(Value)
+		workspace.CurrentCamera.FieldOfView = Value
+	end    
+})
+
+misc:AddToggle({
+	Name = "Anti-AFK",
+	Default = false,
+	Callback = function(Value)
+		_G.antiafk = Value
+        if _G.antiafk == true then
+            notify("Anti-AFK Enabled!")
+        else
+            notify("Anti-AFK Disabled!")
+        end
+	end    
+})
+
+layouts:AddDropdown({
+	Name = "First Layout",
+	Default = "Layout1",
+	Options = {"Layout1", "Layout2", "Layout3"},
+	Callback = function(Value)
+		l1 = Value
+	end    
+})
+
+layouts:AddDropdown({
+	Name = "Second Layout",
+	Default = "Layout1",
+	Options = {"Layout1", "Layout2", "Layout3"},
+	Callback = function(Value)
+		l2 = Value
+	end    
+})
+
+layouts:AddDropdown({
+	Name = "Third Layout",
+	Default = "Layout1",
+	Options = {"Layout1", "Layout2", "Layout3"},
+	Callback = function(Value)
+		l3 = Value
+	end    
+})
+
+local Section5 = layouts:AddSection({Name = "Settings"})
+local Label = layouts:AddLabel("layouts selected by order to load")
+
+layouts:AddToggle({
+	Name = "Load First Layout",
+	Default = false,
+	Callback = function(Value)
+		_G.slf = Value
+	end    
+})
+
+layouts:AddToggle({
+	Name = "Load Second Layout",
+	Default = false,
+	Callback = function(Value)
+		_G.sls = Value
+	end    
+})
+
+layouts:AddToggle({
+	Name = "Load Third Layout",
+	Default = false,
+	Callback = function(Value)
+		_G.slt = Value
+	end    
+})
+
+local Section5 = layouts:AddSection({Name = "Other Settings"})
+
+layouts:AddToggle({
+	Name = "Layout Loading",
+	Default = false,
+	Callback = function(Value)
+		_G.autoload = Value
+	end    
+})
+
+layouts:AddToggle({
+	Name = "Auto Rebirth",
+	Default = false,
+	Callback = function(Value)
+		_G.autorebirth = Value
+	end    
+})
+
+spawn(function()
+    while task.wait(0.1) do
+        if getgenv().shouldrun ~= string then return end
+        if _G.autobox and #workspace.Boxes:GetChildren() > 0 then
+            for i,v in pairs(workspace.Boxes:GetChildren()) do
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position)
+                task.wait(_G.waittime)
+            end
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(tyc.Base.Position + Vector3.new(0,3,0))
+        end
+    end
+end)
+
+spawn(function()
+    while wait(1) do
+        if getgenv().shouldrun ~= string then return end
+        if _G.oreboost then
+            if tyc then
+                createDuplicates()
+            end
+            wait(1)
+        end
+    end
+end)
+
+spawn(function()
+	while true do
+        if getgenv().shouldrun ~= string then return end
+        wait(_G.remotewait)
+		if _G.autoremote then
+			game:GetService('ReplicatedStorage').RemoteDrop:FireServer()
+		end
+	end
+end)
+
+spawn(function()
+    while task.wait(1) do
+        if getgenv().shouldrun ~= string then return end
+        if _G.autorebirth then
+            game.ReplicatedStorage.Rebirth:InvokeServer()
+        end
+    end
+end)
+
+spawn(function()
+    while wait(1) do
+        if getgenv().shouldrun ~= string then return end
+        if _G.autoload then
+            if _G.slf then
+                game.ReplicatedStorage.Layouts:InvokeServer("Load", l1)
+                game.Players.LocalPlayer.leaderstats.Cash.Changed:Wait()
+            end
+            if _G.sls then
+                game.ReplicatedStorage.Layouts:InvokeServer("Load", l2)
+                game.Players.LocalPlayer.leaderstats.Cash.Changed:Wait()
+            end
+            if _G.slt then
+                game.ReplicatedStorage.Layouts:InvokeServer("Load", l3)
+                game.Players.LocalPlayer.leaderstats.Cash.Changed:Wait()
+            end
+            game.Players.LocalPlayer.Rebirths.Changed:Wait()
+            task.wait(0.5)
+        end
+    end
+end)
+
+game.Players.LocalPlayer.Idled:connect(function()
+    if getgenv().shouldrun ~= string then return end
+    if _G.antiafk == true then
+        virtualuser:CaptureController()
+        virtualuser:ClickButton2(Vector2.new())
+    end
+end)
+
+credits:AddLabel("Made By ForlornW46")
+
+credits:AddButton({
+	Name = "Destroy Forlorn Hub",
+	Callback = function()
+      	OrionLib:Destroy()
+  	end    
+})
+
+OrionLib:Init()
