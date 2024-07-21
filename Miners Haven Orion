@@ -13,7 +13,6 @@ _G.autorebirth = false
 _G.autoremote = false
 _G.antiafk = false
 _G.autoload = false
-_G.oretracker = false
 
 local function generatestring(length)
     local charset = "123456789"
@@ -82,26 +81,11 @@ function notify(text)
     })
 end
 
-function convertsn(num)
-    local suffixes = {"", "k", "M", "B", "T", "qd", "Qn", "sx", "Sp", "O", "N", "de", "Ud", "DD", "tdD", "qdD", "QnD", "sxD", "SpD", "OcD", "NvD", "Vgn", "UVg", "DVg", "TVg", "qtV", "QnV", "SeV", "SPG", "OVG", "NVG", "TGN", "UTG", "DTG", "tsTG", "qtTG", "QnTG", "ssTG", "SpTG", "OcTG", "NoTG", "QdDR", "uQDR", "dQDR", "tQDR", "qdQDR", "QnQDR", "sxQDR", "SpQDR", "OQDDr", "NQDDr", "qQGNT", "uQGNT", "dQGNT", "tQGNT", "qdQGNT", "QnQGNT", "sxQGNT", "SpQGNT", "OQQGNT", "NQQGNT", "SXGNTL", "USXGNTL", "DSXGNTL", "TSXGNTL", "QTSXGNTL", "QNSXGNTL", "SXSXGNTL", "SPSXGNTL", "OSXGNTL", "NVSXGNTL", "SPTGNTL", "USPTGNTL", "DSPTGNTL", "TSPTGNTL", "QTSPTGNTL", "QNSPTGNTL", "SXSPTGNTL", "SPSPTGNTL", "OSPTGNTL", "NVSPTGNTL", "OTGNTL", "UOTGNTL", "DOTGNTL", "TOTGNTL", "QTOTGNTL", "QNOTGNTL", "SXOTGNTL", "SPOTGNTL", "OTOTGNTL", "NVOTGNTL", "NONGNTL", "UNONGNTL", "DNONGNTL", "TNONGNTL", "QTNONGNTL", "QNNONGNTL", "SXNONGNTL", "SPNONGNTL", "OTNONGNTL", "NONONGNTL", "CENT", "UNCENT", "inf"}
-    
-    local exponent = math.floor(math.log10(num))
-    local index = math.floor(exponent / 3)
-    
-    if index >= #suffixes then
-        index = #suffixes - 1
-    end
-    
-    local suffix = suffixes[index + 1]
-    local scaledNumber = num / (10 ^ (index * 3))
-    
-    return string.format("%.2f%s", scaledNumber, suffix)
-end
-
 function grabfurnace()
     for _, v in pairs(tyc:GetChildren()) do
-        if v.ClassName == "Model" and not string.find(v.Name, "Teleport") then
-            if v.Model:FindFirstChild("Lava") then
+        if v:IsA("Model") then
+            local model = v:FindFirstChild("Model")
+            if model and model:FindFirstChild("Lava") and not model:FindFirstChild("Lava"):FindFirstChild("TeleportSend") then
                 return v.Name
             end
         end
@@ -119,7 +103,6 @@ local function isTesla(upgName)
 end
 
 function upgrade(drop)
-    if getgenv().shouldrun ~= string then return end
     drop.Transparency = 1
     drop.Anchored = false
     drop.CFrame = CFrame.new(tyc.Base.Position + Vector3.new(0, 40, 0))
@@ -150,30 +133,16 @@ function upgrade(drop)
         end
     end
     drop.Anchored = true
-    local tween = game:GetService("TweenService"):Create(drop,TweenInfo.new(0.5),{CFrame = tyc[grabfurnace()].Model.Lava.CFrame*CFrame.new(0,1,0)})
+    local tween = game:GetService("TweenService"):Create(drop,TweenInfo.new(0.25),{CFrame = tyc[grabfurnace()].Model.Lava.CFrame*CFrame.new(0,1,0)})
     tween:Play()
     tween.Completed:Wait()
     drop.Anchored = false
+    drop.Velocity = Vector3.zero
 end
 
 drops[tyc.Name].ChildAdded:Connect(function(child)
-    if getgenv().shouldrun ~= string then return end
     if _G.oreboost then
         upgrade(child)
-    end
-    if _G.oretracker then
-        local tracker = game.ReplicatedStorage.TrackerTypes.Premium:Clone()
-        tracker.Parent = child
-        tracker.Adornee = child
-        task.wait(0.25)
-        local cash = child:WaitForChild("Cash")
-        tracker.Amount.Text = "$" .. tostring(convertsn(cash.Value))
-        child:WaitForChild("Cash").Changed:Connect(function()
-            if getgenv().shouldrun ~= string then return end
-            if tracker and cash then
-                tracker.Amount.Text = "$" .. tostring(convertsn(cash.Value))
-            end
-        end)
     end
 end)
 
@@ -276,19 +245,6 @@ main:AddToggle({
             notify("Ore Boost Enabled!")
         else
             notify("Ore Boost Disabled!")
-        end
-	end    
-})
-
-main:AddToggle({
-	Name = "Ore Tracker",
-	Default = false,
-	Callback = function(Value)
-		_G.oretracker = Value
-        if _G.oretacker then
-            notify("Ore Tracker Enabled!")
-        else
-            notify("Ore Tracker Disabled!")
         end
 	end    
 })
