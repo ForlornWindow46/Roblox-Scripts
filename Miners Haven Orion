@@ -133,11 +133,9 @@ function upgrade(drop)
         end
     end
     drop.Anchored = true
-    local tween = game:GetService("TweenService"):Create(drop,TweenInfo.new(0.25),{CFrame = tyc[grabfurnace()].Model.Lava.CFrame*CFrame.new(0,1,0)})
-    tween:Play()
-    tween.Completed:Wait()
+    drop:PivotTo(tyc[grabfurnace()].Model.Lava.CFrame*CFrame.new(0,1,0))
+    task.wait(0.25)
     drop.Anchored = false
-    drop.Velocity = Vector3.zero
 end
 
 drops[tyc.Name].ChildAdded:Connect(function(child)
