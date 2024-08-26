@@ -1,10 +1,3 @@
---[[
-	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
--- put this in autoexc for 48 unc functions will add on or replace some so delete the ones you already have (that is if they work)
--- 54/112 48% NOTE: u need to put queue_on_teleport in ur autoexec
--- Shoutout to me (Sky/jazminethecooles2001), luau, and vxsty
--- if this doesnt work try just executing this or executing the ones u need or one by one or so
 if not getgenv then
     getfenv().getgenv = function(layer)
         return getfenv(layer)
