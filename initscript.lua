@@ -1,10 +1,17 @@
-_G.isscriptable = function(self, prop)
- local s = pcall(function()
-  self[prop] = self[prop]
- end)
- return s
+local genv = getgenv()
+
+genv["identifyexecutor"] = function()
+	return "Forlorn 1.0.8"
 end
 
-getgenv().printidentity = function ()
+genv["whatexecutor"] = function()
+	return "Forlorn 1.0.8"
+end
+
+genv["printidentity"] = function()
 	print("Current identity is 5")
+end
+
+genv["getexecutorname"] = function()
+	return "Forlorn"
 end
