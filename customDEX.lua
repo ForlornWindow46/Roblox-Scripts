@@ -1,3 +1,14 @@
+-- https://github.com/LorekeeperZinnia/Dex
+
+--[[
+	New Dex
+	Final Version
+	Developed by Moon
+	Modified for Infinite Yield
+	
+	Dex is a debugging suite designed to help the user debug games and find any potential vulnerabilities.
+]]
+
 local nodes = {}
 local selection
 local cloneref = cloneref or function(...) return ... end
@@ -42,8 +53,8 @@ local function main()
 	local tree,listEntries,explorerOrders,searchResults,specResults = {},{},{},{},{}
 	local expanded
 	local entryTemplate,treeFrame,toolBar,descendantAddedCon,descendantRemovingCon,itemChangedCon
-	local ffa = workspace.Parent.FindFirstAncestorWhichIsA
-	local getDescendants = workspace.Parent.GetDescendants
+	local ffa = game["Run Service"].Parent.FindFirstAncestorWhichIsA
+	local getDescendants = game["Run Service"].Parent.GetDescendants
 	local getTextSize = service.TextService.GetTextSize
 	local updateDebounce,refreshDebounce = false,false
 	local nilNode = {Obj = Instance.new("Folder")}
@@ -53,7 +64,7 @@ local function main()
 	local sortingEnabled,autoUpdateSearch
 	local table,math = table,math
 	local nilMap,nilCons = {},{}
-	local connectSignal = workspace.Parent.DescendantAdded.Connect
+	local connectSignal = game["Run Service"].Parent.DescendantAdded.Connect
 	local addObject,removeObject,moveObject = nil,nil,nil
 
 	addObject = function(root)
@@ -423,7 +434,7 @@ local function main()
 			end
 		end
 
-		recur(nodes[workspace.Parent],1)
+		recur(nodes[game["Run Service"].Parent],1)
 
 		-- Nil Instances
 		if env.getnilinstances then
@@ -571,14 +582,14 @@ local function main()
 				local listOffsetX = startX - treeFrame.AbsolutePosition.X
 				local listOffsetY = startY - treeFrame.AbsolutePosition.Y
 
-				releaseEvent = cloneref(workspace.Parent:GetService("UserInputService")).InputEnded:Connect(function(input)
+				releaseEvent = cloneref(game["Run Service"].Parent:GetService("UserInputService")).InputEnded:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 then
 						releaseEvent:Disconnect()
 						mouseEvent:Disconnect()
 					end
 				end)
 
-				mouseEvent = cloneref(workspace.Parent:GetService("UserInputService")).InputChanged:Connect(function(input)
+				mouseEvent = cloneref(game["Run Service"].Parent:GetService("UserInputService")).InputChanged:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseMovement then
 						local deltaX = mouse.X - startX
 						local deltaY = mouse.Y - startY
@@ -629,7 +640,7 @@ local function main()
 	Explorer.Refresh = function()
 		local maxNodes = math.max(math.ceil((treeFrame.AbsoluteSize.Y) / 20),0)	
 		local renameNodeVisible = false
-		local isa = workspace.Parent.IsA
+		local isa = game["Run Service"].Parent.IsA
 
 		for i = 1,maxNodes do
 			local entry = listEntries[i]
@@ -757,15 +768,15 @@ local function main()
 		if itemChangedCon then itemChangedCon:Disconnect() end
 
 		if Main.Elevated then
-			descendantAddedCon = workspace.Parent.DescendantAdded:Connect(addObject)
-			descendantRemovingCon = workspace.Parent.DescendantRemoving:Connect(removeObject)
+			descendantAddedCon = game["Run Service"].Parent.DescendantAdded:Connect(addObject)
+			descendantRemovingCon = game["Run Service"].Parent.DescendantRemoving:Connect(removeObject)
 		else
-			descendantAddedCon = workspace.Parent.DescendantAdded:Connect(function(obj) pcall(addObject,obj) end)
-			descendantRemovingCon = workspace.Parent.DescendantRemoving:Connect(function(obj) pcall(removeObject,obj) end)
+			descendantAddedCon = game["Run Service"].Parent.DescendantAdded:Connect(function(obj) pcall(addObject,obj) end)
+			descendantRemovingCon = game["Run Service"].Parent.DescendantRemoving:Connect(function(obj) pcall(removeObject,obj) end)
 		end
 
 		if Settings.Explorer.UseNameWidth then
-			itemChangedCon = workspace.Parent.ItemChanged:Connect(function(obj,prop)
+			itemChangedCon = game["Run Service"].Parent.ItemChanged:Connect(function(obj,prop)
 				if prop == "Parent" and nodes[obj] then
 					moveObject(obj)
 				elseif prop == "Name" and nodes[obj] then
@@ -773,7 +784,7 @@ local function main()
 				end
 			end)
 		else
-			itemChangedCon = workspace.Parent.ItemChanged:Connect(function(obj,prop)
+			itemChangedCon = game["Run Service"].Parent.ItemChanged:Connect(function(obj,prop)
 				if prop == "Parent" and nodes[obj] then
 					moveObject(obj)
 				end
@@ -902,7 +913,7 @@ local function main()
 		local context = Lib.ContextMenu.new()
 
 		context:Register("CUT",{Name = "Cut", IconMap = Explorer.MiscIcons, Icon = "Cut", DisabledIcon = "Cut_Disabled", Shortcut = "Ctrl+Z", OnClick = function()
-			local destroy,clone = workspace.Parent.Destroy,workspace.Parent.Clone
+			local destroy,clone = game["Run Service"].Parent.Destroy,game["Run Service"].Parent.Clone
 			local sList,newClipboard = selection.List,{}
 			local count = 1
 			for i = 1,#sList do
@@ -919,7 +930,7 @@ local function main()
 		end})
 
 		context:Register("COPY",{Name = "Copy", IconMap = Explorer.MiscIcons, Icon = "Copy", DisabledIcon = "Copy_Disabled", Shortcut = "Ctrl+C", OnClick = function()
-			local clone = workspace.Parent.Clone
+			local clone = game["Run Service"].Parent.Clone
 			local sList,newClipboard = selection.List,{}
 			local count = 1
 			for i = 1,#sList do
@@ -958,7 +969,7 @@ local function main()
 		end})
 
 		context:Register("DUPLICATE",{Name = "Duplicate", IconMap = Explorer.MiscIcons, Icon = "Copy", DisabledIcon = "Copy_Disabled", Shortcut = "Ctrl+D", OnClick = function()
-			local clone = workspace.Parent.Clone
+			local clone = game["Run Service"].Parent.Clone
 			local sList = selection.List
 			local newSelection = {}
 			local count = 1
@@ -982,7 +993,7 @@ local function main()
 		end})
 
 		context:Register("DELETE",{Name = "Delete", IconMap = Explorer.MiscIcons, Icon = "Delete", DisabledIcon = "Delete_Disabled", Shortcut = "Del", OnClick = function()
-			local destroy = workspace.Parent.Destroy
+			local destroy = game["Run Service"].Parent.Destroy
 			local sList = selection.List
 			for i = 1,#sList do
 				pcall(destroy,sList[i].Obj)
@@ -1015,7 +1026,7 @@ local function main()
 		context:Register("UNGROUP",{Name = "Ungroup", IconMap = Explorer.MiscIcons, Icon = "Ungroup", DisabledIcon = "Ungroup_Disabled", Shortcut = "Ctrl+U", OnClick = function()
 			local newSelection = {}
 			local count = 1
-			local isa = workspace.Parent.IsA
+			local isa = game["Run Service"].Parent.IsA
 
 			local function ungroup(node)
 				local par = node.Parent.Obj
@@ -1096,7 +1107,7 @@ local function main()
 
 		context:Register("TELEPORT_TO",{Name = "Teleport To", IconMap = Explorer.MiscIcons, Icon = "TeleportTo", OnClick = function()
 			local sList = selection.List
-			local isa = workspace.Parent.IsA
+			local isa = game["Run Service"].Parent.IsA
 
 			local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
 			if not hrp then return end
@@ -1177,8 +1188,8 @@ local function main()
 		end})
 
 		local clth = function(str)
-			if str:sub(1, 28) == "workspace.Parent:GetService(\"Workspace\")" then str = str:gsub("workspace.Parent:GetService%(\"Workspace\"%)", "workspace", 1) end
-			if str:sub(1, 27 + #plr.Name) == "workspace.Parent:GetService(\"Players\")." .. plr.Name then str = str:gsub("workspace.Parent:GetService%(\"Players\"%)." .. plr.Name, "workspace.Parent:GetService(\"Players\").LocalPlayer", 1) end
+			if str:sub(1, 28) == "game:GetService(\"Workspace\")" then str = str:gsub("game:GetService%(\"Workspace\"%)", "workspace", 1) end
+			if str:sub(1, 27 + #plr.Name) == "game:GetService(\"Players\")." .. plr.Name then str = str:gsub("game:GetService%(\"Players\"%)." .. plr.Name, "game:GetService(\"Players\").LocalPlayer", 1) end
 			return str
 		end
 
@@ -1229,7 +1240,7 @@ local function main()
 
 		context:Register("VIEW_OBJECT",{Name = "View Object (Right click to reset)", IconMap = Explorer.ClassIcons, Icon = 5, OnClick = function()
 			local sList = selection.List
-			local isa = workspace.Parent.IsA
+			local isa = game["Run Service"].Parent.IsA
 
 			for i = 1,#sList do
 				local node = sList[i]
@@ -1270,7 +1281,7 @@ local function main()
 			local newSelection = {}
 			local count = 1
 			local sList = selection.List
-			local isa = workspace.Parent.IsA
+			local isa = game["Run Service"].Parent.IsA
 
 			for i = 1,#sList do
 				local node = sList[i]
@@ -1325,17 +1336,17 @@ local function main()
 		if not env.getnilinstances then return end
 
 		local nilInsts = env.getnilinstances()
-		local getDescs = workspace.Parent.GetDescendants
+		local getDescs = game["Run Service"].Parent.GetDescendants
 		--local newNilMap = {}
 		--local newNilRoots = {}
 		--local nilRoots = Explorer.NilRoots
-		--local connect = workspace.Parent.DescendantAdded.Connect
+		--local connect = game["Run Service"].Parent.DescendantAdded.Connect
 		--local disconnect
 		--if not nilRoots then nilRoots = {} Explorer.NilRoots = nilRoots end
 
 		for i = 1,#nilInsts do
 			local obj = nilInsts[i]
-			if obj ~= workspace.Parent then
+			if obj ~= game["Run Service"].Parent then
 				nilMap[obj] = true
 				--newNilRoots[obj] = true
 
@@ -1390,8 +1401,8 @@ local function main()
 	end
 
 	Explorer.GetInstancePath = function(obj)
-		local ffc = workspace.Parent.FindFirstChild
-		local getCh = workspace.Parent.GetChildren
+		local ffc = game["Run Service"].Parent.FindFirstChild
+		local getCh = game["Run Service"].Parent.GetChildren
 		local path = ""
 		local curObj = obj
 		local ts = tostring
@@ -1402,8 +1413,8 @@ local function main()
 		local formatLuaString = Lib.FormatLuaString
 
 		while curObj do
-			if curObj == workspace.Parent then
-				path = "workspace.Parent"..path
+			if curObj == game["Run Service"].Parent then
+				path = "game"..path
 				break
 			end
 
@@ -1424,7 +1435,7 @@ local function main()
 					local parCh = getCh(parObj)
 					local fcInd = tableFind(parCh,curObj)
 					indexName = ":GetChildren()["..fcInd.."]"
-				elseif parObj == workspace.Parent and API.Classes[className] and API.Classes[className].Tags.Service then
+				elseif parObj == game["Run Service"].Parent and API.Classes[className] and API.Classes[className].Tags.Service then
 					indexName = ':GetService("'..className..'")'
 				end
 			elseif parObj == nil then
@@ -1521,19 +1532,19 @@ local function main()
 				if not className then return end
 
 				return {
-					Headers = {"local isa = workspace.Parent.IsA"},
+					Headers = {"local isa = game.IsA"},
 					Predicate = "isa(obj,'"..className.."')"
 				}
 			end,
 			["remotes"] = function(argString)
 				return {
-					Headers = {"local isa = workspace.Parent.IsA"},
+					Headers = {"local isa = game.IsA"},
 					Predicate = "isa(obj,'RemoteEvent') or isa(obj,'RemoteFunction')"
 				}
 			end,
 			["bindables"] = function(argString)
 				return {
-					Headers = {"local isa = workspace.Parent.IsA"},
+					Headers = {"local isa = game.IsA"},
 					Predicate = "isa(obj,'BindableEvent') or isa(obj,'BindableFunction')"
 				}
 			end,
@@ -1544,7 +1555,7 @@ local function main()
 				if not service.Players.LocalPlayer.Character or not service.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") or not service.Players.LocalPlayer.Character.HumanoidRootPart:IsA("BasePart") then return end
 
 				return {
-					Headers = {"local isa = workspace.Parent.IsA", "local hrp = service.Players.LocalPlayer.Character.HumanoidRootPart"},
+					Headers = {"local isa = game.IsA", "local hrp = service.Players.LocalPlayer.Character.HumanoidRootPart"},
 					Setups = {"local hrpPos = hrp.Position"},
 					ObjectDefs = {"local isBasePart = isa(obj,'BasePart')"},
 					Predicate = "(isBasePart and (obj.Position-hrpPos).Magnitude <= "..num..")"
@@ -1850,7 +1861,7 @@ return search]==]
 
 			if searchFunc then
 				local start = tick()
-				searchFunc(nodes[workspace.Parent])
+				searchFunc(nodes[game["Run Service"].Parent])
 				searchFunc(nilNode)
 				--warn(tick()-start)
 			end
@@ -2036,8 +2047,8 @@ return search]==]
 
 	Explorer.UpdateSelectionVisuals = function()
 		local holder = Explorer.SelectionVisualsHolder
-		local isa = workspace.Parent.IsA
-		local clone = workspace.Parent.Clone
+		local isa = game["Run Service"].Parent.IsA
+		local clone = game["Run Service"].Parent.Clone
 		if not holder then
 			holder = Instance.new("ScreenGui")
 			holder.Name = "ExplorerSelections"
@@ -2209,8 +2220,8 @@ return search]==]
 
 
 		-- Fill in nodes
-		nodes[workspace.Parent] = {Obj = workspace.Parent}
-		expanded[nodes[workspace.Parent]] = true
+		nodes[game["Run Service"].Parent] = {Obj = game["Run Service"].Parent}
+		expanded[nodes[game["Run Service"].Parent]] = true
 
 		-- Nil Instances
 		if env.getnilinstances then
@@ -2219,7 +2230,7 @@ return search]==]
 
 		Explorer.SetupConnections()
 
-		local insts = getDescendants(workspace.Parent)
+		local insts = getDescendants(game["Run Service"].Parent)
 		if Main.Elevated then
 			for i = 1,#insts do
 				local obj = insts[i]
@@ -2297,11 +2308,11 @@ local function main()
 	local inputBox,inputTextBox,inputProp
 	local checkboxes,propCons = {},{}
 	local table,string = table,string
-	local getPropChangedSignal = workspace.Parent.GetPropertyChangedSignal
-	local getAttributeChangedSignal = workspace.Parent.GetAttributeChangedSignal
-	local isa = workspace.Parent.IsA
-	local getAttribute = workspace.Parent.GetAttribute
-	local setAttribute = workspace.Parent.SetAttribute
+	local getPropChangedSignal = game["Run Service"].Parent.GetPropertyChangedSignal
+	local getAttributeChangedSignal = game["Run Service"].Parent.GetAttributeChangedSignal
+	local isa = game["Run Service"].Parent.IsA
+	local getAttribute = game["Run Service"].Parent.GetAttribute
+	local setAttribute = game["Run Service"].Parent.SetAttribute
 
 	Properties.GuiElems = {}
 	Properties.Index = 0
@@ -2656,7 +2667,7 @@ local function main()
 		local classLists = {}
 		local lower = string.lower
 		local RMDCustomOrders = RMD.PropertyOrders
-		local getAttributes = workspace.Parent.GetAttributes
+		local getAttributes = game["Run Service"].Parent.GetAttributes
 		local maxAttrs = Settings.Properties.MaxAttributes
 		local showingAttrs = Settings.Properties.ShowAttributes
 		local foundAttrs = {}
@@ -3641,7 +3652,7 @@ local function main()
 		local maxX = propsFrame.AbsoluteSize.X
 		local valueWidth = math.max(Properties.MinInputWidth,maxX-Properties.ViewWidth)
 		local inputPropVisible = false
-		local isa = workspace.Parent.IsA
+		local isa = game["Run Service"].Parent.IsA
 		local UDim2 = UDim2
 		local stringSplit = string.split
 		local scaleType = Settings.Properties.ScaleType
@@ -4236,7 +4247,7 @@ local function main()
 
 		save.MouseButton1Click:Connect(function()
 			local source = codeFrame:GetText()
-			local filename = "Place_"..workspace.Parent.PlaceId.."_Script_"..os.time()..".txt"
+			local filename = "Place_"..game["Run Service"].Parent.PlaceId.."_Script_"..os.time()..".txt"
 
 			env.writefile(filename, source)
 			if env.movefileas then
@@ -4801,7 +4812,7 @@ local function main()
 	Lib.FetchCustomAsset = function(url,filepath)
 		if not env.writefile then return end
 
-		local s,data = pcall(workspace.Parent.HttpGet,workspace.Parent,url)
+		local s,data = pcall(game["Run Service"].Parent.HttpGet,game["Run Service"].Parent,url)
 		if not s then return end
 
 		env.writefile(filepath,data)
@@ -5434,7 +5445,7 @@ local function main()
 		local sideDisplayOrder
 		local sideTweenInfo = TweenInfo.new(0.3,Enum.EasingStyle.Quad,Enum.EasingDirection.Out)
 		local tweens = {}
-		local isA = workspace.Parent.IsA
+		local isA = game["Run Service"].Parent.IsA
 
 		local theme = {
 			MainColor1 = Color3.fromRGB(52,52,52),
@@ -5617,7 +5628,7 @@ local function main()
 
 					guiDragging = true
 
-					releaseEvent = cloneref(workspace.Parent:GetService("UserInputService")).InputEnded:Connect(function(input)
+					releaseEvent = cloneref(game["Run Service"].Parent:GetService("UserInputService")).InputEnded:Connect(function(input)
 						if input.UserInputType == Enum.UserInputType.MouseButton1 then
 							releaseEvent:Disconnect()
 							mouseEvent:Disconnect()
@@ -5630,7 +5641,7 @@ local function main()
 						end
 					end)
 
-					mouseEvent = cloneref(workspace.Parent:GetService("UserInputService")).InputChanged:Connect(function(input)
+					mouseEvent = cloneref(game["Run Service"].Parent:GetService("UserInputService")).InputChanged:Connect(function(input)
 						if input.UserInputType == Enum.UserInputType.MouseMovement and self.Draggable and not self.Closed then
 							if self.Aligned then
 								if leftSide.Resizing or rightSide.Resizing then return end
@@ -6796,7 +6807,7 @@ local function main()
 			["UserSettings"] = true,
 			["wait"] = true,
 			["warn"] = true,
-			["workspace.Parent"] = true,
+			["game"] = true,
 			["shared"] = true,
 			["script"] = true,
 			["workspace"] = true,
@@ -7007,7 +7018,7 @@ local function main()
 						end
 					end)
 
-					scrollEvent = cloneref(workspace.Parent:GetService("RunService")).RenderStepped:Connect(function()
+					scrollEvent = cloneref(game["Run Service"].Parent:GetService("RunService")).RenderStepped:Connect(function()
 						if scrollPowerV ~= 0 or scrollPowerH ~= 0 then
 							obj:ScrollDelta(scrollPowerH,scrollPowerV)
 							updateSelection()
@@ -8569,8 +8580,8 @@ local function main()
 			local greenInput = pickerFrame.Green.Input
 			local blueInput = pickerFrame.Blue.Input
 
-			local user = cloneref(workspace.Parent:GetService("UserInputService"))
-			local mouse = cloneref(workspace.Parent:GetService("Players")).LocalPlayer:GetMouse()
+			local user = cloneref(game["Run Service"].Parent:GetService("UserInputService"))
+			local mouse = cloneref(game["Run Service"].Parent:GetService("Players")).LocalPlayer:GetMouse()
 
 			local hue,sat,val = 0,0,1
 			local red,green,blue = 1,1,1
@@ -8953,8 +8964,8 @@ local function main()
 			local currentPoint = nil
 			local resetSequence = nil
 
-			local user = cloneref(workspace.Parent:GetService("UserInputService"))
-			local mouse = cloneref(workspace.Parent:GetService("Players")).LocalPlayer:GetMouse()
+			local user = cloneref(game["Run Service"].Parent:GetService("UserInputService"))
+			local mouse = cloneref(game["Run Service"].Parent:GetService("Players")).LocalPlayer:GetMouse()
 
 			for i = 2,10 do
 				local newLine = Instance.new("Frame")
@@ -9428,8 +9439,8 @@ local function main()
 			local closeButton = pickerFrame.Close
 			local topClose = pickerTopBar.Close
 
-			local user = cloneref(workspace.Parent:GetService("UserInputService"))
-			local mouse = cloneref(workspace.Parent:GetService("Players")).LocalPlayer:GetMouse()
+			local user = cloneref(game["Run Service"].Parent:GetService("UserInputService"))
+			local mouse = cloneref(game["Run Service"].Parent:GetService("Players")).LocalPlayer:GetMouse()
 
 			local colors = {{Color3.new(1,0,1),0},{Color3.new(0.2,0.9,0.2),0.2},{Color3.new(0.4,0.5,0.9),0.7},{Color3.new(0.6,1,1),1}}
 			local resetSequence = nil
@@ -9695,7 +9706,7 @@ local function main()
 	end)()
 
 	Lib.ViewportTextBox = (function()
-		local textService = cloneref(workspace.Parent:GetService("TextService"))
+		local textService = cloneref(game["Run Service"].Parent:GetService("TextService"))
 
 		local props = {
 			OffsetX = 0,
@@ -10178,7 +10189,7 @@ local Settings = {}
 local Apps = {}
 local env = {}
 local service = setmetatable({},{__index = function(self,name)
-	local serv = cloneref(workspace.Parent:GetService(name))
+	local serv = cloneref(game["Run Service"].Parent:GetService(name))
 	self[name] = serv
 	return serv
 end})
@@ -11045,7 +11056,7 @@ Main = (function()
 	end
 	
 	Main.Init = function()
-		Main.Elevated = pcall(function() local a = cloneref(workspace.Parent:GetService("CoreGui")):GetFullName() end)
+		Main.Elevated = pcall(function() local a = cloneref(game["Run Service"].Parent:GetService("CoreGui")):GetFullName() end)
 		Main.InitEnv()
 		Main.LoadSettings()
 		Main.SetupFilesystem()
