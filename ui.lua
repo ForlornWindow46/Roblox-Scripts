@@ -1,8 +1,7 @@
 if not game.Loaded then
     game.Loaded:Wait()
+    wait(1)
 end
-
-wait(1)
 
 if _G.forlornicusloadedyes == false or _G.forlornicusloadedyes == nil then
 	_G.forlornicusloadedyes = true
