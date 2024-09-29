@@ -1,3 +1,7 @@
+game.Loaded:Wait()
+
+wait(1)
+
 if _G.forlornicusloadedyes == false or _G.forlornicusloadedyes == nil then
 	_G.forlornicusloadedyes = true
 	local Executor = Instance.new("ScreenGui")
