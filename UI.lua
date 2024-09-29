@@ -146,7 +146,7 @@ if _G.forlornicusloadedyes == false or _G.forlornicusloadedyes == nil then
 		local script = Instance.new('LocalScript', Clear)
 	
 		script.Parent.MouseButton1Click:Connect(function()
-			script.Parent.Parent.ScriptBox.Text = ""
+			script.Parent.Parent.ScrollingFrame.ScriptBox.Text = ""
 		end)
 	end
 	coroutine.wrap(YETVFFD_fake_script)()
@@ -154,7 +154,7 @@ if _G.forlornicusloadedyes == false or _G.forlornicusloadedyes == nil then
 		local script = Instance.new('LocalScript', Execute)
 	
 		script.Parent.MouseButton1Click:Connect(function()
-			loadstring(script.Parent.Parent.ScriptBox.Text)()
+			loadstring(script.Parent.Parent.ScrollingFrame.ScriptBox.Text)()
 		end)
 	end
 	coroutine.wrap(IXYLUF_fake_script)()
