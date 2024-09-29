@@ -22,6 +22,7 @@ if _G.forlornicusloadedyes == false or _G.forlornicusloadedyes == nil then
 	Executor.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	
 	Main.Name = "Main"
+	Main.ZIndex = 999999999
 	Main.Parent = Executor
 	Main.BackgroundColor3 = Color3.new(0.172549, 0.172549, 0.172549)
 	Main.BorderColor3 = Color3.new(0, 0, 0)
