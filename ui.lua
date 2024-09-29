@@ -139,7 +139,7 @@ if _G.forlornicusloadedyes == false or _G.forlornicusloadedyes == nil then
 		local script = Instance.new('LocalScript', Execute)
 	
 		script.Parent.MouseButton1Click:Connect(function()
-			getgenv().loadstring(script.Parent.Parent.ScriptBox.Text, true)()
+			loadstring(script.Parent.Parent.ScriptBox.Text)()
 		end)
 	end
 	coroutine.wrap(YGYYZB_fake_script)()
