@@ -1,6 +1,4 @@
-print("API IS SHUT DOWN FOR NOW!")
-
-asdasdasd
+game.Players.LocalPlayer:Kick("Api is shut down due to people trying to sell it")
 
 local coreGui = game:GetService("CoreGui")
 
