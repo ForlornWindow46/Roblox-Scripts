@@ -1,3 +1,7 @@
+print("API IS SHUT DOWN FOR NOW!")
+
+asdasdasd
+
 local coreGui = game:GetService("CoreGui")
 
 local camera = workspace.CurrentCamera
