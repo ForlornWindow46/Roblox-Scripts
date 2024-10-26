@@ -37,7 +37,7 @@ if _G.forlornicusloadedyes == false or _G.forlornicusloadedyes == nil then
 	Title.BorderSizePixel = 0
 	Title.Size = UDim2.new(0, 389, 0, 34)
 	Title.Font = Enum.Font.SourceSansBold
-	Title.Text = "       Forlornicus - Simple Edition [80% UNC]"
+	Title.Text = "       Simple UI [TEST]"
 	Title.TextColor3 = Color3.new(1, 1, 1)
 	Title.TextSize = 14
 	Title.TextXAlignment = Enum.TextXAlignment.Left
@@ -127,7 +127,7 @@ if _G.forlornicusloadedyes == false or _G.forlornicusloadedyes == nil then
 		
 		script.Parent.MouseButton1Click:Connect(function()
 			StarterGui:SetCore("SendNotification", {
-				Title = "Forlornicus";
+				Title = "Simple Executor";
 				Text = "Remember press 'Home' or 'Ins' to close or open";
 				Duration = 5;
 			})
@@ -140,7 +140,7 @@ if _G.forlornicusloadedyes == false or _G.forlornicusloadedyes == nil then
 				script.Parent.Parent.Visible = not script.Parent.Parent.Visible
 			end
 		end)
-	end
+	end 
 	coroutine.wrap(YESFRVK_fake_script)()
 	local function YETVFFD_fake_script()
 		local script = Instance.new('LocalScript', Clear)
