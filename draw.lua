@@ -969,4 +969,6 @@ function drawingFunctions.cleardrawcache()
 	end
 end
 
+
+
 return {Drawing = DrawingLib, functions = drawingFunctions}
