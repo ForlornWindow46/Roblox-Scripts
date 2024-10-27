@@ -647,16 +647,6 @@ function DrawingLib.createFrame()
 	})
 end
 
-task.spawn(function()
-	wait(3)
-	game:GetService("StarterGui"):SetCore("SendNotification", {
-		Title = "[Xeno]",
-		Text = "Discord server for Xeno is out!\nhttps://discord.gg/fQNzTw2JXn",
-		Duration = 20
-	})
-	print("Discord server for Xeno is out!\nhttps://discord.gg/fQNzTw2JXn")
-end)
-
 function DrawingLib.createScreenGui()
 	local screenGuiObj = ({
 		IgnoreGuiInset = true,
@@ -978,5 +968,7 @@ function drawingFunctions.cleardrawcache()
 		drawing:Remove()
 	end
 end
+
+
 
 return {Drawing = DrawingLib, functions = drawingFunctions}
