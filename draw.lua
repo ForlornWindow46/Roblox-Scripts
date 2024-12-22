@@ -1,5 +1,3 @@
-print("ForlornAPI - if you payed for this you were scammed.")
-
 local coreGui = game:GetService("CoreGui")
 
 local camera = workspace.CurrentCamera
