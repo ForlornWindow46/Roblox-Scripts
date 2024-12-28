@@ -28,20 +28,20 @@ local baseDrawingObj = setmetatable({
 	ZIndex = 0,
 	Transparency = 1,
 	Color = Color3.new(),
-	Remove = newcclosure(function(self)
+	Remove = function(self)
 		setmetatable(self, nil)
 	end,
-	Destroy = newcclosure(function(self)
+	Destroy = function(self)
 		setmetatable(self, nil)
 	end,
-	SetProperty = newcclosure(function(self, index, value)
+	SetProperty = function(self, index, value)
 		if self[index] ~= nil then
 			self[index] = value
 		else
 			warn("Attempted to set invalid property: " .. tostring(index))
 		end
 	end,
-	GetProperty = newcclosure(function(self, index)
+	GetProperty = function(self, index)
 		if self[index] ~= nil then
 			return self[index]
 		else
@@ -49,11 +49,11 @@ local baseDrawingObj = setmetatable({
 			return nil
 		end
 	end,
-	SetParent = newcclosure(function(self, parent)
+	SetParent = function(self, parent)
 		self.Parent = parent
 	end
 }, {
-	__add = newcclosure(function(t1, t2)
+	__add = function(t1, t2)
 		local result = {}
 		for index, value in pairs(t1) do
 			result[index] = value
@@ -87,7 +87,7 @@ function DrawingLib.createLine()
 
 	lineFrame.Parent = drawingUI
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if lineObj[index] == nil then 
 				warn("Invalid property: " .. tostring(index))
 				return 
@@ -117,7 +117,7 @@ function DrawingLib.createLine()
 			end
 			lineObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					lineFrame:Destroy()
@@ -126,7 +126,7 @@ function DrawingLib.createLine()
 			end
 			return lineObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -163,7 +163,7 @@ function DrawingLib.createText()
 	textLabel.Parent, uiStroke.Parent = drawingUI, textLabel
 
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if textObj[index] == nil then 
 				warn("Invalid property: " .. tostring(index))
 				return 
@@ -198,7 +198,7 @@ function DrawingLib.createText()
 			end
 			textObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					textLabel:Destroy()
@@ -209,7 +209,7 @@ function DrawingLib.createText()
 			end
 			return textObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -234,7 +234,7 @@ function DrawingLib.createCircle()
 	circleFrame.Parent, uiCorner.Parent, uiStroke.Parent = drawingUI, circleFrame, circleFrame
 
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if circleObj[index] == nil then 
 				warn("Invalid property: " .. tostring(index))
 				return 
@@ -266,7 +266,7 @@ function DrawingLib.createCircle()
 			end
 			circleObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					circleFrame:Destroy()
@@ -275,7 +275,7 @@ function DrawingLib.createCircle()
 			end
 			return circleObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -294,7 +294,7 @@ function DrawingLib.createSquare()
 	squareFrame.Parent, uiStroke.Parent = drawingUI, squareFrame
 
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if squareObj[index] == nil then 
 				warn("Invalid property: " .. tostring(index))
 				return 
@@ -325,7 +325,7 @@ function DrawingLib.createSquare()
 			end
 			squareObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					squareFrame:Destroy()
@@ -334,7 +334,7 @@ function DrawingLib.createSquare()
 			end
 			return squareObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -355,7 +355,7 @@ function DrawingLib.createImage()
 	imageFrame.Parent = drawingUI
 
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if imageObj[index] == nil then 
 				warn("Invalid property: " .. tostring(index))
 				return 
@@ -381,7 +381,7 @@ function DrawingLib.createImage()
 			end
 			imageObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					imageFrame:Destroy()
@@ -392,7 +392,7 @@ function DrawingLib.createImage()
 			end
 			return imageObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -424,7 +424,7 @@ function DrawingLib.createQuad()
 	fillFrame.Parent = drawingUI
 
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if quadObj[index] == nil then 
 				warn("Invalid property: " .. tostring(index))
 				return 
@@ -463,7 +463,7 @@ function DrawingLib.createQuad()
 			end
 			quadObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					for _, linePoint in pairs(_linePoints) do
@@ -475,7 +475,7 @@ function DrawingLib.createQuad()
 			end
 			return quadObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -505,7 +505,7 @@ function DrawingLib.createTriangle()
 	fillFrame.Parent = drawingUI
 
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if triangleObj[index] == nil then 
 				warn("Invalid property: " .. tostring(index))
 				return 
@@ -541,7 +541,7 @@ function DrawingLib.createTriangle()
 			end
 			triangleObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					for _, linePoint in pairs(_linePoints) do
@@ -553,7 +553,7 @@ function DrawingLib.createTriangle()
 			end
 			return triangleObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -580,7 +580,7 @@ function DrawingLib.createFrame()
 	frame.Parent = drawingUI
 
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if frameObj[index] == nil then
 				warn("Invalid property: " .. tostring(index))
 				return
@@ -603,7 +603,7 @@ function DrawingLib.createFrame()
 			end
 			frameObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					frame:Destroy()
@@ -612,7 +612,7 @@ function DrawingLib.createFrame()
 			end
 			return frameObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -636,7 +636,7 @@ function DrawingLib.createScreenGui()
 	screenGui.Parent = coreGui
 
 	return setmetatable({Parent = coreGui}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if screenGuiObj[index] == nil then
 				warn("Invalid property: " .. tostring(index))
 				return
@@ -657,7 +657,7 @@ function DrawingLib.createScreenGui()
 			end
 			screenGuiObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					screenGui:Destroy()
@@ -666,7 +666,7 @@ function DrawingLib.createScreenGui()
 			end
 			return screenGuiObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -702,7 +702,7 @@ function DrawingLib.createTextButton()
 
 	return setmetatable({
 		Parent = drawingUI,
-		Connect = newcclosure(function(_, eventName, callback)
+		Connect = function(_, eventName, callback)
 			if eventName == "MouseButton1Click" then
 				if buttonEvents["MouseButton1Click"] then
 					buttonEvents["MouseButton1Click"]:Disconnect()
@@ -713,7 +713,7 @@ function DrawingLib.createTextButton()
 			end
 		end
 	}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if buttonObj[index] == nil then
 				warn("Invalid property: " .. tostring(index))
 				return
@@ -751,7 +751,7 @@ function DrawingLib.createTextButton()
 			end
 			buttonObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					button:Destroy()
@@ -760,7 +760,7 @@ function DrawingLib.createTextButton()
 			end
 			return buttonObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -792,7 +792,7 @@ function DrawingLib.createTextLabel()
 	label.Parent = drawingUI
 
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if labelObj[index] == nil then
 				warn("Invalid property: " .. tostring(index))
 				return
@@ -821,7 +821,7 @@ function DrawingLib.createTextLabel()
 			end
 			labelObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					label:Destroy()
@@ -830,7 +830,7 @@ function DrawingLib.createTextLabel()
 			end
 			return labelObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -862,7 +862,7 @@ function DrawingLib.createTextBox()
 	textBox.Parent = drawingUI
 
 	return setmetatable({Parent = drawingUI}, {
-		__newindex = newcclosure(function(_, index, value)
+		__newindex = function(_, index, value)
 			if boxObj[index] == nil then
 				warn("Invalid property: " .. tostring(index))
 				return
@@ -891,7 +891,7 @@ function DrawingLib.createTextBox()
 			end
 			boxObj[index] = value
 		end,
-		__index = newcclosure(function(self, index)
+		__index = function(self, index)
 			if index == "Remove" or index == "Destroy" then
 				return function()
 					textBox:Destroy()
@@ -900,7 +900,7 @@ function DrawingLib.createTextBox()
 			end
 			return boxObj[index]
 		end,
-		__tostring = newcclosure(function() return "Drawing" end
+		__tostring = function() return "Drawing" end
 	})
 end
 
@@ -912,7 +912,7 @@ getgenv().Drawing = {
         ["Monospace"] = 3
     },
     
-    new = newcclosure(function(drawingType)
+    new = function(drawingType)
         drawingIndex += 1
         if drawingType == "Line" then
             return DrawingLib.createLine()
@@ -944,7 +944,7 @@ getgenv().Drawing = {
     end
 }
 
-getgenv().isrenderobj = newcclosure(function(drawingObj)
+getgenv().isrenderobj = function(drawingObj)
     local success, isrenderobj = pcall(function()
 		return drawingObj.Parent == drawingUI
 	end)
@@ -952,7 +952,7 @@ getgenv().isrenderobj = newcclosure(function(drawingObj)
 	return isrenderobj
 end
 
-getgenv().getrenderproperty = newcclosure(function(drawingObj, property)
+getgenv().getrenderproperty = function(drawingObj, property)
 	local success, drawingProperty  = pcall(function()
 		return drawingObj[property]
 	end)
@@ -963,12 +963,12 @@ getgenv().getrenderproperty = newcclosure(function(drawingObj, property)
 	end
 end
 
-getgenv().setrenderproperty = newcclosure(function(drawingObj, property, value)
+getgenv().setrenderproperty = function(drawingObj, property, value)
 	assert(getgenv().getrenderproperty(drawingObj, property), "'" .. tostring(property) .. "' is not a valid property of " .. tostring(drawingObj) .. ", " .. tostring(typeof(drawingObj)))
 	drawingObj[property]  = value
 end
 
-getgenv().cleardrawcache = newcclosure(function()
+getgenv().cleardrawcache = function()
 	for _, drawing in drawingUI:GetDescendants() do
 		drawing:Remove()
 	end
