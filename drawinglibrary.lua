@@ -2,7 +2,7 @@ local coreGui = game:GetService("CoreGui")
 
 local camera = workspace.CurrentCamera
 local drawingUI = Instance.new("ScreenGui")
-drawingUI.Name = "Drawing | Xeno"
+drawingUI.Name = "DrawingLibrary - Forlorn"
 drawingUI.IgnoreGuiInset = true
 drawingUI.DisplayOrder = 0x7fffffff
 drawingUI.Parent = coreGui
@@ -973,3 +973,4 @@ getgenv().cleardrawcache = function()
 		drawing:Remove()
 	end
 end
+
