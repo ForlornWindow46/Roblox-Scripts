@@ -1,0 +1,7 @@
+local module = {}
+
+function module.loadstringtest()
+    return "dickcheese"
+end
+
+return module
