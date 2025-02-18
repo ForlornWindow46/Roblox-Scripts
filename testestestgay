@@ -954,15 +954,24 @@ getgenv().isrenderobj = function(drawingObj)
 end
 
 getgenv().getrenderproperty = function(drawingObj, property)
-	local success, drawingProperty  = pcall(function()
-		return drawingObj[property]
-	end)
-	if not success then return end
-
-	if drawingProperty ~= nil then
-		return drawingProperty
-	end
+    if type(drawingObj) ~= "table" and type(drawingObj) ~= "userdata" then
+        error("getrenderproperty: expected drawingObj to be table or userdata, got " .. type(drawingObj), 2)
+    end
+    if type(property) ~= "string" then
+        error("getrenderproperty: property name must be a string, got " .. type(property), 2)
+    end
+    local success, drawingProperty = pcall(function()
+        return drawingObj[property]
+    end)
+    if not success then
+        error("getrenderproperty: failed to get property '" .. property .. "': " .. tostring(drawingProperty), 2)
+    end
+    if drawingProperty == nil then
+        error("getrenderproperty: property '" .. property .. "' is nil or does not exist", 2)
+    end
+    return drawingProperty
 end
+
 
 getgenv().setrenderproperty = function(drawingObj, property, value)
 	assert(getgenv().getrenderproperty(drawingObj, property), "'" .. tostring(property) .. "' is not a valid property of " .. tostring(drawingObj) .. ", " .. tostring(typeof(drawingObj)))
