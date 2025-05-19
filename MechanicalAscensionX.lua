@@ -42,7 +42,7 @@ local shouldrun = generatestring(20)
 local runKey = shouldrun
 
 local baseteslas = {
-    "AfterShock",
+    "Aftershock",
 }
 
 local tyc = nil
@@ -91,45 +91,61 @@ local function upgrade(drop)
     task.wait(0.1)
     drop.Anchored = true
 
-    --[[local usedTeslas = {}
-    for _, teslaName in ipairs(baseteslas) do
+    local function apply_upgrades()
+        local used = {}
         for _, upg in ipairs(tyc.Items:GetChildren()) do
-            if upg.Name == teslaName and not usedTeslas[teslaName] and upg:FindFirstChild("Model") and upg:FindFirstChild("Model"):FindFirstChild("Upgrade") then
-                drop.Anchored = false
-                drop.CFrame = upg.Model.Upgrade.CFrame
-                task.wait(0.05)
-                drop.Anchored = true
-                usedTeslas[teslaName] = true
-                break
-            end
-        end
-    end]]--
+            if not isTesla(upg.Name) and not used[upg.Name] and upg:FindFirstChild("Model") then
+                local model = upg.Model
+                local upgrade_part = model:FindFirstChild("MeshPart") or model:FindFirstChild("Part")
 
-    for _, upg in ipairs(tyc.Items:GetChildren()) do
-        if not isTesla(upg.Name) and upg:FindFirstChild("Model") then
-            local model = upg.Model
-            local upgradePart = nil
-            
-            if model:FindFirstChild("MeshPart") then
-                upgradePart = model.MeshPart
-            elseif model:FindFirstChild("Part") then
-                upgradePart = model.Part
-            end
-
-            if upgradePart and upgradePart:IsA("BasePart") then
-                drop.Anchored = false
-                drop.CFrame = upgradePart.CFrame
-                task.wait(0.05)
-                drop.Anchored = true
+                if upgrade_part and upgrade_part:IsA("BasePart") then
+                    drop.Anchored = false
+                    drop.Velocity = Vector3.new(0, 0, 0)
+                    drop.CFrame = upgrade_part.CFrame
+                    task.wait(0.1)
+                    drop.Anchored = true
+                    used[upg.Name] = true
+                end
             end
         end
     end
-    
-    local furnaceItem = grabfurnace()
-    if furnaceItem and furnaceItem:FindFirstChild("Model") then
-        local lava = furnaceItem.Model:FindFirstChild("Process")
+
+    local function use_tesla()
+        for _, tesla_name in ipairs(baseteslas) do
+            for _, upg in ipairs(tyc.Items:GetChildren()) do
+                if upg.Name == tesla_name and upg:FindFirstChild("Model") then
+                    local model = upg.Model
+                    local upgrade_part = model:FindFirstChild("MeshPart") or model:FindFirstChild("Part")
+
+                    if upgrade_part and upgrade_part:IsA("BasePart") then
+                        drop.Anchored = false
+                        drop.Velocity = Vector3.new(0, 0, 0)
+                        drop.CFrame = upgrade_part.CFrame
+                        task.wait(0.1)
+                        drop.Anchored = true
+                        return true
+                    end
+                else
+                    return false
+                end
+            end
+        end
+        return false
+    end
+
+    apply_upgrades()
+
+    if use_tesla() then
+        task.wait(5.1)
+        apply_upgrades()
+    end
+
+    local furnace_item = grabfurnace()
+    if furnace_item and furnace_item:FindFirstChild("Model") then
+        local lava = furnace_item.Model:FindFirstChild("Process")
         if lava and lava:IsA("BasePart") then
             drop.Anchored = true
+            drop.Velocity = Vector3.new(0, 0, 0)
             drop:PivotTo(lava.CFrame * CFrame.new(0, 1, 0))
             task.wait(0.25)
             drop.Anchored = false
@@ -144,17 +160,27 @@ drops.ChildAdded:Connect(function(child)
 end)
 
 local function createDuplicates()
-    for _, upg in ipairs(tyc:GetChildren()) do
-        if not isTesla(upg.Name) and upg:FindFirstChild("Model") and upg:FindFirstChild("Model"):FindFirstChild("Upgrade") then
-            if not upg.Model.Upgrade:FindFirstChild("Cloned") then
-                local decoy = upg.Model.Upgrade:Clone()
+    for _, upg in ipairs(tyc.Items:GetChildren()) do
+        if not isTesla(upg.Name) and upg:FindFirstChild("Model") and not upg.Model:FindFirstChild("Decoy") and not upg.Model:FindFirstChild("Cloned") then
+            local upgrade_part = nil
+            if upg.Model:FindFirstChild("MeshPart") then
+                upgrade_part = upg.Model.MeshPart
+            elseif upg.Model:FindFirstChild("Part") then
+                upgrade_part = upg.Model.Part
+            end
+
+            if upgrade_part then
+                local decoy = upgrade_part:Clone()
+                decoy.Name = "Decoy"
                 decoy.Parent = upg.Model
-                decoy.Name = "UpgradeDecoy"
-                local tag = Instance.new("StringValue", upg.Model.Upgrade)
+
+                local tag = Instance.new("StringValue")
                 tag.Name = "Cloned"
-                upg.Model.Upgrade.Transparency = 1
-                upg.Model.Upgrade.Size = Vector3.new(5, 5, 5)
-                upg.Model.Upgrade.CFrame = CFrame.new(tyc.Planes.Main.Position + Vector3.new(0, 40, 0))
+                tag.Parent = upgrade_part
+
+                upgrade_part.Transparency = 1
+                upgrade_part.Size = Vector3.new(5, 5, 5)
+                upgrade_part.CFrame = CFrame.new(tyc.Planes.Main.Position + Vector3.new(0, 40, 0))
             end
         end
     end
@@ -212,7 +238,7 @@ main:CreateButton({
 main:CreateButton({
     Name = "Grab Crates",
     Callback = function()
-        for i, v in pairs(workspace.Game.Crated:GetChildren()) do
+        for i, v in pairs(workspace.Game.Crates:GetChildren()) do
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position)
             task.wait(waittime)
         end
@@ -340,7 +366,6 @@ end)
 
 spawn(function()
     while wait(1) do
-        if runKey ~= shouldrun then return end
         if oreboost then
             if tyc then
                 createDuplicates()
